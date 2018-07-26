@@ -498,14 +498,15 @@ $(document).ready(function () {
         },
         data: {
             labels: [
-                "A",
-                "B",
-                "C",
-                "D"
+                "ETH",
+                // "B",
+                // "C",
+                // "D"
             ],
             datasets: [
                 {
-                    data: [300, 50, 100, 80],
+                    // data: [300, 50, 100, 80],
+                    data: [100],
                     borderWidth: 0,
                     backgroundColor: [
                         '#723ac3',
