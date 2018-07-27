@@ -27,13 +27,6 @@
   <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
-  <script>
-    $(".dropdown-menu li a").click(function () {
-      alert(test)
-      var selText = $(this).text();
-      $(this).parents('.btn-group').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>');
-    });
-  </script>
 </head>
 
 <body>
@@ -90,26 +83,10 @@
                     </div>
                     <strong>Active Miners</strong>
                   </div>
-                  <div class="number dashtext-1">88</div>
+                  <div class="number dashtext-1" id="active-miners"></div>
                 </div>
                 <!-- <div class="progress progress-template">
                     <div role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-template dashbg-1"></div>
-                  </div> -->
-              </div>
-            </div>
-            <div class="col-md-3 col-sm-6">
-              <div class="statistic-block block">
-                <div class="progress-details d-flex align-items-end justify-content-between">
-                  <div class="title">
-                    <div class="icon">
-                      <i class="icon-layers"></i>
-                    </div>
-                    <strong>Active GPUs</strong>
-                  </div>
-                  <div class="number dashtext-2">471</div>
-                </div>
-                <!-- <div class="progress progress-template">
-                    <div role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-template dashbg-2"></div>
                   </div> -->
               </div>
             </div>
@@ -122,7 +99,23 @@
                     </div>
                     <strong>Total Hash</strong>
                   </div>
-                  <div class="number dashtext-3">13000</div>
+                  <div class="number dashtext-2" id="total-hash"></div>
+                </div>
+                <!-- <div class="progress progress-template">
+                    <div role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-template dashbg-2"></div>
+                  </div> -->
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+              <div class="statistic-block block">
+                <div class="progress-details d-flex align-items-end justify-content-between">
+                  <div class="title">
+                    <div class="icon">
+                      <i class="icon-layers"></i>
+                    </div>
+                    <strong>Active GPUs</strong>
+                  </div>
+                  <div class="number dashtext-3" id="active-gpus"></div>
                 </div>
                 <!-- <div class="progress progress-template">
                     <div role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-template dashbg-3"></div>
@@ -138,7 +131,7 @@
                     </div>
                     <strong>Avg GPU Temp</strong>
                   </div>
-                  <div class="number dashtext-4">67.77c</div>
+                  <div class="number dashtext-4" id="avg-gpu-temp"></div>
                 </div>
                 <!-- <div class="progress progress-template">
                     <div role="progressbar" style="width: 35%" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-template dashbg-4"></div>
@@ -176,29 +169,29 @@
                         </button>
                         <ul class="dropdown-menu">
                           <li>
-                            <a class="dropdown-item" href="#">Ethereum</a>
+                            <a class="dropdown-item">Ethereum</a>
                           </li>
                           <li>
-                            <a class="dropdown-item" href="#">Ether Classic</a>
+                            <a class="dropdown-item">Ether Classic</a>
                           </li>
                           <li>
-                            <a class="dropdown-item" href="#">Pirl</a>
+                            <a class="dropdown-item">Pirl</a>
                           </li>
                           <li>
-                            <a class="dropdown-item" href="#">Music</a>
+                            <a class="dropdown-item">Music</a>
                           </li>
                           <li>
-                            <a class="dropdown-item" href="#">Ellaism</a>
+                            <a class="dropdown-item">Ellaism</a>
                           </li>
                           <li>
-                            <a class="dropdown-item" href="#">Expanse</a>
+                            <a class="dropdown-item">Expanse</a>
                           </li>
                           <li>
-                            <a class="dropdown-item" href="#">Ubiq</a>
+                            <a class="dropdown-item">Ubiq</a>
                           </li>
                         </ul>
                         <div class="col-sm-1"></div>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Coming soon">Save changes</button>
                       </div>
                     </div>
                   </div>
@@ -238,24 +231,26 @@
                     <td>4/4</td>
                     <td>124</td>
                   </tr>
-                  <td>c92be5</td>
-                  <td>cq1-a3</td>
-                  <td>10.1.101.3</td>
-                  <td>4/4</td>
-                  <td>118</td>
+                  <tr>
+                    <td>c92be5</td>
+                    <td>cq1-a3</td>
+                    <td>10.1.101.3</td>
+                    <td>4/4</td>
+                    <td>118</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
-        <section>
+        <!-- <section>
           <div class="col-lg-12">
             <div class="block">
               <div class="title">
                 <strong>Miner Details</strong>
               </div>
               <div class="table-responsive">
-                <table class="table table-hover" id="table" data-toggle="table" data-url="http://cryqua.ethosdistro.com/?json=yes">
+                <table class="table table-hover" id="table" data-toggle="table" data-url="{'hello':'world'}">
                   <thead>
                     <tr>
                       <th data-field="total_hash">total_hash</th>
@@ -268,7 +263,7 @@
           </div>
           </div>
           </div>
-        </section>
+        </section> -->
     </div>
   </div>
   </section>
@@ -276,7 +271,7 @@
     <div class="footer__block block no-margin-bottom">
       <div class="container-fluid text-center">
         <!-- Please do not remove the backlink to us unless you support us at https://bootstrapious.com/donate. It is part of the license conditions. Thank you for understanding :)-->
-        <p class="no-margin-bottom">2018 &copy; CryptoQuarry. Design by
+        <p class="no-margin-bottom">2018 &copy; CryptoQuarry Inc. Design by
           <a href="https://bootstrapious.com">Bootstrapious</a>.</p>
       </div>
     </div>
@@ -301,6 +296,41 @@
         $("#options").text($(this).text());
       });
     });
+  </script>
+  <script>
+    $.getJSON("http://cryqua.ethosdistro.com/?json=yes", callbackFuncWithData);
+
+    function callbackFuncWithData(data) {
+      document.getElementById("active-miners").innerHTML = data.alive_rigs;
+      document.getElementById("active-gpus").innerHTML = data.alive_gpus;
+      document.getElementById("total-hash").innerHTML = Math.round(data.total_hash);
+      document.getElementById("avg-gpu-temp").innerHTML = Math.round(data.avg_temp) + "c";
+      // var rigs = new Object();
+      // for (var key in data) {
+      //   if (data.hasOwnProperty(key) && (key = "rigs")) {
+      //     console.log(key + " -> " + data[key]);
+      //     var rigData = data[key];
+      //     for (var key in rigData) {
+      //       console.log(key + " -> " + rigData[key]);
+      //       var rigStat = rigData[key];
+      //       for (var key in rigStat) {
+      //         console.log(key + " -> " + rigStat[key]);
+      //         if (rigStat = "gpus") {
+      //           rigs.key = "rigStat";
+      //         }
+      //           // console.log(rigs)
+
+      //       }
+      //     }
+      //     break;
+      //   }
+      // }
+    }
+  </script>
+  <script>
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
   </script>
 </body>
 

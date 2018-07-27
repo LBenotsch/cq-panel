@@ -8,11 +8,11 @@ $(document).ready(function () {
     // ------------------------------------------------------- //
     // Line Chart Custom 1
     // ------------------------------------------------------ //
-    var LINECHARTEXMPLE   = $('#lineChartCustom1');
+    var LINECHARTEXMPLE = $('#lineChartCustom1');
     var lineChartExample = new Chart(LINECHARTEXMPLE, {
         type: 'line',
         options: {
-            legend: {labels:{fontColor:"#777", fontSize: 12}},
+            legend: { labels: { fontColor: "#777", fontSize: 12 } },
             scales: {
                 xAxes: [{
                     display: false,
@@ -393,7 +393,7 @@ $(document).ready(function () {
     // ------------------------------------------------------- //
     // Bar Chart
     // ------------------------------------------------------ //
-    var BARCHARTEXMPLE    = $('#barChartCustom3');
+    var BARCHARTEXMPLE = $('#barChartCustom3');
     var barChartExample = new Chart(BARCHARTEXMPLE, {
         type: 'bar',
         options: {
@@ -487,42 +487,49 @@ $(document).ready(function () {
     // ------------------------------------------------------- //
     // Pie Chart Custom 1
     // ------------------------------------------------------ //
-    var PIECHARTEXMPLE    = $('#pieChartCustom1');
-    var pieChartExample = new Chart(PIECHARTEXMPLE, {
-        type: 'pie',
-        options: {
-            legend: {
-                display: true,
-                position: "left"
-            }
-        },
-        data: {
-            labels: [
+    $.getJSON("http://cryqua.ethosdistro.com/?json=yes", callbackFuncWithData);
+
+    function callbackFuncWithData(data) {
+        //document.getElementById("currently-mining").innerHTML = data."3ff038".pool;
+
+        var PIECHARTEXMPLE = $('#pieChartCustom1');
+        var pieChartExample = new Chart(PIECHARTEXMPLE, {
+            type: 'pie',
+            options: {
+                legend: {
+                    display: true,
+                    position: "left"
+                }
+            },
+            data: {
+                labels: [
+                    //<p id="currently-mining"></p>
                 "ETH",
                 // "B",
                 // "C",
                 // "D"
             ],
-            datasets: [
-                {
-                    // data: [300, 50, 100, 80],
-                    data: [100],
-                    borderWidth: 0,
-                    backgroundColor: [
-                        '#723ac3',
-                        "#864DD9",
-                        "#9762e6",
-                        "#a678eb"
-                    ],
-                    hoverBackgroundColor: [
-                        '#723ac3',
-                        "#864DD9",
-                        "#9762e6",
-                        "#a678eb"
-                    ]
-                }]
+                datasets: [
+                    {
+                        // data: [300, 50, 100, 80],
+                        data: [100],
+                        borderWidth: 0,
+                        backgroundColor: [
+                            '#723ac3',
+                            "#864DD9",
+                            "#9762e6",
+                            "#a678eb"
+                        ],
+                        hoverBackgroundColor: [
+                            '#723ac3',
+                            "#864DD9",
+                            "#9762e6",
+                            "#a678eb"
+                        ]
+                    }]
             }
-    });
+        });
+    }
 
     var pieChartExample = {
         responsive: true
@@ -600,7 +607,7 @@ $(document).ready(function () {
             }
         }
     };
-    var POLARCHARTEXMPLE  = $('#polarChartCustom');
+    var POLARCHARTEXMPLE = $('#polarChartCustom');
     var polarChartExample = new Chart(POLARCHARTEXMPLE, {
         type: 'polarArea',
         options: chartOptions,
@@ -657,7 +664,7 @@ $(document).ready(function () {
             position: 'left'
         }
     };
-    var RADARCHARTEXMPLE  = $('#radarChartCustom');
+    var RADARCHARTEXMPLE = $('#radarChartCustom');
     var radarChartExample = new Chart(RADARCHARTEXMPLE, {
         type: 'radar',
         options: chartOptions,
