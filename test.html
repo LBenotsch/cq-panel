@@ -19,27 +19,26 @@
     </div>
   </section> -->
 
-  <!doctype html>
+<!doctype html>
 <html lang="en">
 
 <head>
 
-<!-- Required CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.css">
+  <!-- Required CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.css">
 
 </head>
 
 <body>
-
-<table class ="table table-hover" id ="table" data-toggle="table" data-url="http://cryqua.ethosdistro.com/?json=yes">
+  <table class="table table-hover" id="table" data-toggle="table" data-url="http://34.224.90.223/panel.json">
     <thead>
-        <tr>
-            <th data-field="total_hash">total_hash</th>
-            
-        </tr>
+      <tr>
+        <th data-field="rack_loc">Test</th>
+        <!-- <th data-field="rack_loc">Location</th> -->
+      </tr>
     </thead>
-</table>
+  </table>
 </body>
 
 <!-- Required js -->
@@ -47,9 +46,26 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.js"></script>
 <script>
-    $(table).bootstrapTable('refresh', {
-        url: 'http://cryqua.ethosdistro.com/?json=yes'
-    });
+  // $(table).bootstrapTable('refresh', {
+  //   url: 'http://cryqua.ethosdistro.com/?json=yes'
+  // });
+</script>
+<script>
+  var obj;
+  var text = $.getJSON('http://34.224.90.223/panel.json', function () {
+    obj = JSON.parse(text.responseText);
+    console.log(obj.rigs);
+  });
+
+  // function responseHandler(obj) {
+  //   var flatArray = [];
+  //   $.each(obj, function (i, rigs) {
+  //     flatArray.push(JSON.flatten(rigs));
+  //   });
+  //   console.log(flatArray);
+  //   return flatArray;
+  // }
+
 </script>
 
 </html>
