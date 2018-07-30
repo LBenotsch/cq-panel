@@ -487,10 +487,39 @@ $(document).ready(function () {
     // ------------------------------------------------------- //
     // Pie Chart Custom 1
     // ------------------------------------------------------ //
-    $.getJSON("http://cryqua.ethosdistro.com/?json=yes", callbackFuncWithData);
 
-    function callbackFuncWithData(data) {
-        //document.getElementById("currently-mining").innerHTML = data."3ff038".pool;
+    var text = $.getJSON('http://34.224.90.223/panel.json', function () {
+        var preobj = JSON.parse(text.responseText);
+        var obj = preobj.rigs;
+        var coin = 'Unknown';
+        // if (obj[0].pool = 'us1.ethermine.org:4444') {
+        //     coin = 'ETH'
+        // }
+        switch (obj[0].pool) {
+            case 'us1.ethermine.org:4444':
+                coin = 'ETH'
+                break;
+            case 'us1-etc.ethermine.org:4444':
+                coin = 'ETC'
+                break;
+            case 'us-east.pirlpool.eu:8004':
+                coin = 'PIRL'
+                break;
+            case 'musicoin.nomnom.technology:4444':
+                coin = 'MUSIC'
+                break;
+            case 'lb.geo.ellapool.eu:8004':
+                coin = 'ELLA'
+                break;
+            case 'us.expmine.pro:9009':
+                coin = 'EXP'
+                break;
+            case 'us.ubiqpool.io:8008':
+                coin = 'UBQ'
+                break;
+            default:
+                coin = 'Unknown'
+        }
 
         var PIECHARTEXMPLE = $('#pieChartCustom1');
         var pieChartExample = new Chart(PIECHARTEXMPLE, {
@@ -503,12 +532,12 @@ $(document).ready(function () {
             },
             data: {
                 labels: [
-                    //<p id="currently-mining"></p>
-                "ETH",
-                // "B",
-                // "C",
-                // "D"
-            ],
+                    coin,
+                    //"ETH",
+                    // "B",
+                    // "C",
+                    // "D"
+                ],
                 datasets: [
                     {
                         // data: [300, 50, 100, 80],
@@ -529,7 +558,8 @@ $(document).ready(function () {
                     }]
             }
         });
-    }
+    });
+
 
     var pieChartExample = {
         responsive: true

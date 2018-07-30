@@ -206,132 +206,87 @@
               <strong>Miner Details</strong>
             </div>
             <div class="table-responsive">
-              <table class="table table-striped table-sm">
+              <table class="table table-striped table-sm" data-sort-name="ip" data-sort-order="desc">
                 <thead>
                   <tr>
                     <th>Name</th>
                     <th>Location</th>
-                    <th>IP Address</th>
+                    <th data-field="ip" data-sortable="true">IP Address</th>
                     <th>GPUs</th>
                     <th>Total Hashrate</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td>c92be5</td>
-                    <td>cq1-a1</td>
-                    <td>10.1.101.1</td>
-                    <td>3/3</td>
-                    <td>76</td>
-                  </tr>
-                  <tr>
-                    <td>6edcf9</td>
-                    <td>cq1-a2</td>
-                    <td>10.1.101.2</td>
-                    <td>4/4</td>
-                    <td>124</td>
-                  </tr>
-                  <tr>
-                    <td>c92be5</td>
-                    <td>cq1-a3</td>
-                    <td>10.1.101.3</td>
-                    <td>4/4</td>
-                    <td>118</td>
-                  </tr>
-                </tbody>
+                <tbody id="tableData"></tbody>
               </table>
             </div>
           </div>
         </div>
-        <!-- <section>
-          <div class="col-lg-12">
-            <div class="block">
-              <div class="title">
-                <strong>Miner Details</strong>
-              </div>
-              <div class="table-responsive">
-                <table class="table table-hover" id="table" data-toggle="table" data-url="{'hello':'world'}">
-                  <thead>
-                    <tr>
-                      <th data-field="total_hash">total_hash</th>
-
-                    </tr>
-                  </thead>
-                </table>
-              </div>
-            </div>
+      </section>
+      <footer class="footer">
+        <div class="footer__block block no-margin-bottom">
+          <div class="container-fluid text-center">
+            <!-- Please do not remove the backlink to us unless you support us at https://bootstrapious.com/donate. It is part of the license conditions. Thank you for understanding :)-->
+            <p class="no-margin-bottom">2018 &copy; CryptoQuarry Inc. Design by
+              <a href="https://bootstrapious.com">Bootstrapious</a>.</p>
           </div>
-          </div>
-          </div>
-        </section> -->
-    </div>
-  </div>
-  </section>
-  <footer class="footer">
-    <div class="footer__block block no-margin-bottom">
-      <div class="container-fluid text-center">
-        <!-- Please do not remove the backlink to us unless you support us at https://bootstrapious.com/donate. It is part of the license conditions. Thank you for understanding :)-->
-        <p class="no-margin-bottom">2018 &copy; CryptoQuarry Inc. Design by
-          <a href="https://bootstrapious.com">Bootstrapious</a>.</p>
+        </div>
+      </footer>
       </div>
-    </div>
-  </footer>
-  </div>
-  </div>
-  <!-- JavaScript files-->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/popper.js/umd/popper.min.js"> </script>
-  <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-  <script src="vendor/jquery.cookie/jquery.cookie.js"> </script>
-  <script src="vendor/chart.js/Chart.min.js"></script>
-  <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
-  <script src="js/charts-home.js"></script>
-  <script src="js/front.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap-table.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap-table-zh-CN.min.js"></script>
-  <script src="js/charts-custom.js"></script>
-  <script>
-    $(document).ready(function () {
-      $(".dropdown-menu li a").click(function () {
-        $("#options").text($(this).text());
-      });
-    });
-  </script>
-  <script>
-    $.getJSON("http://cryqua.ethosdistro.com/?json=yes", callbackFuncWithData);
+      </div>
+      <!-- JavaScript files-->
+      <script src="vendor/jquery/jquery.min.js"></script>
+      <script src="vendor/popper.js/umd/popper.min.js"> </script>
+      <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+      <script src="vendor/jquery.cookie/jquery.cookie.js"> </script>
+      <script src="vendor/chart.js/Chart.min.js"></script>
+      <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
+      <script src="js/charts-home.js"></script>
+      <script src="js/front.js"></script>
+      <script src="vendor/bootstrap/js/bootstrap-table.min.js"></script>
+      <script src="vendor/bootstrap/js/bootstrap-table-zh-CN.min.js"></script>
+      <script src="js/charts-custom.js"></script>
+      <script>
+        $(document).ready(function () {
+          $(".dropdown-menu li a").click(function () {
+            $("#options").text($(this).text());
+          });
+        });
+      </script>
+      <script>
+        var obj;
+        var text = $.getJSON('http://34.224.90.223/panel.json', function () {
+          var preobj = JSON.parse(text.responseText);
+          var obj = preobj.rigs;
+          //console.log(obj);
 
-    function callbackFuncWithData(data) {
-      document.getElementById("active-miners").innerHTML = data.alive_rigs;
-      document.getElementById("active-gpus").innerHTML = data.alive_gpus;
-      document.getElementById("total-hash").innerHTML = Math.round(data.total_hash);
-      document.getElementById("avg-gpu-temp").innerHTML = Math.round(data.avg_temp) + "c";
-      // var rigs = new Object();
-      // for (var key in data) {
-      //   if (data.hasOwnProperty(key) && (key = "rigs")) {
-      //     console.log(key + " -> " + data[key]);
-      //     var rigData = data[key];
-      //     for (var key in rigData) {
-      //       console.log(key + " -> " + rigData[key]);
-      //       var rigStat = rigData[key];
-      //       for (var key in rigStat) {
-      //         console.log(key + " -> " + rigStat[key]);
-      //         if (rigStat = "gpus") {
-      //           rigs.key = "rigStat";
-      //         }
-      //           // console.log(rigs)
+          var k = '<tbody>'
+          for (i = 0; i < obj.length; i++) {
+            k += '<tr>';
+            k += '<td>' + obj[i].rigname + '</td>';
+            k += '<td>' + obj[i].rack_loc + '</td>';
+            k += '<td>' + obj[i].ip + '</td>';
+            k += '<td>' + obj[i].gpus + '</td>';
+            k += '<td>' + obj[i].hash + '</td>';
+            k += '</tr>';
+          }
+          k += '</tbody>';
+          document.getElementById('tableData').innerHTML = k;
+        });
 
-      //       }
-      //     }
-      //     break;
-      //   }
-      // }
-    }
-  </script>
-  <script>
-    $(function () {
-      $('[data-toggle="tooltip"]').tooltip()
-    })
-  </script>
+        $.getJSON("http://cryqua.ethosdistro.com/?json=yes", callbackFuncWithData);
+
+        function callbackFuncWithData(data) {
+          document.getElementById("active-miners").innerHTML = data.alive_rigs;
+          document.getElementById("active-gpus").innerHTML = data.alive_gpus;
+          document.getElementById("total-hash").innerHTML = Math.round(data.total_hash);
+          document.getElementById("avg-gpu-temp").innerHTML = Math.round(data.avg_temp) + "c";
+        }
+      </script>
+      <script>
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        })
+      </script>
 </body>
 
 </html>
