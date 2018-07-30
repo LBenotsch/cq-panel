@@ -276,7 +276,7 @@
         $.getJSON("http://cryqua.ethosdistro.com/?json=yes", callbackFuncWithData);
 
         function callbackFuncWithData(data) {
-          document.getElementById("active-miners").innerHTML = data.alive_rigs;
+          document.getElementById("active-miners").innerHTML = data.alive_rigs + "/" + data.total_rigs;
           document.getElementById("active-gpus").innerHTML = data.alive_gpus;
           document.getElementById("total-hash").innerHTML = Math.round(data.total_hash);
           document.getElementById("avg-gpu-temp").innerHTML = Math.round(data.avg_temp) + "c";
