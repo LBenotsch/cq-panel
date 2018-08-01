@@ -491,35 +491,71 @@ $(document).ready(function () {
     var text = $.getJSON('http://34.224.90.223/panel.json', function () {
         var preobj = JSON.parse(text.responseText);
         var obj = preobj.rigs;
-        var coin = 'Unknown';
-        // if (obj[0].pool = 'us1.ethermine.org:4444') {
-        //     coin = 'ETH'
-        // }
-        switch (obj[0].pool) {
-            case 'us1.ethermine.org:4444':
-                coin = 'ETH'
-                break;
-            case 'us1-etc.ethermine.org:4444':
-                coin = 'ETC'
-                break;
-            case 'us-east.pirlpool.eu:8004':
-                coin = 'PIRL'
-                break;
-            case 'musicoin.nomnom.technology:4444':
-                coin = 'MUSIC'
-                break;
-            case 'lb.geo.ellapool.eu:8004':
-                coin = 'ELLA'
-                break;
-            case 'us.expmine.pro:9009':
-                coin = 'EXP'
-                break;
-            case 'us.ubiqpool.io:8008':
-                coin = 'UBQ'
-                break;
-            default:
-                coin = 'Unknown'
+
+        var ethRigs = 0;
+        var etcRigs = 0;
+        var pirlRigs = 0;
+        var musicRigs = 0;
+        var ellaRigs = 0;
+        var expRigs = 0;
+        var ubqRigs = 0;
+        for (i = 0; i < obj.length; i++) {
+            switch (obj[i].pool) {
+                case 'us1.ethermine.org:4444':
+                    ethRigs++;
+                    break;
+                case 'us1-etc.ethermine.org:4444':
+                    etcRigs++;
+                    break;
+                case 'us-east.pirlpool.eu:8004':
+                    pirlRigs++;
+                    break;
+                case 'musicoin.nomnom.technology:4444':
+                    musicRigs++;
+                    break;
+                case 'lb.geo.ellapool.eu:8004':
+                    ellaRigs++;
+                    break;
+                case 'us.expmine.pro:9009':
+                    expRigs++;
+                    break;
+                case 'us.ubiqpool.io:8008':
+                    ubqRigs++;
+                    break;
+            }
         }
+
+        var coinNames = [];
+        var coinAmmounts = [];
+        if (ethRigs > 0) {
+            coinNames.push("ETH");
+            coinAmmounts.push(ethRigs);
+        }
+        if (etcRigs > 0) {
+            coinNames.push("ETC");
+            coinAmmounts.push(etcRigs);
+        }
+        if (pirlRigs > 0) {
+            coinNames.push("PIRL");
+            coinAmmounts.push(pirlRigs);
+        }
+        if (musicRigs > 0) {
+            coinNames.push("MUSIC")
+            coinAmmounts.push(musicRigs);
+        }
+        if (ellaRigs > 0) {
+            coinNames.push("ELLA")
+            coinAmmounts.push(ellaRigs);
+        }
+        if (expRigs > 0) {
+            coinNames.push("EXP")
+            coinAmmounts.push(expRigs);
+        }
+        if (ubqRigs > 0) {
+            coinNames.push("UBQ")
+            coinAmmounts.push(ubqRigs);
+        }
+
 
         var PIECHARTEXMPLE = $('#pieChartCustom1');
         var pieChartExample = new Chart(PIECHARTEXMPLE, {
@@ -531,29 +567,32 @@ $(document).ready(function () {
                 }
             },
             data: {
-                labels: [
-                    coin,
-                    //"ETH",
-                    // "B",
-                    // "C",
-                    // "D"
-                ],
+                labels: coinNames,
                 datasets: [
                     {
-                        // data: [300, 50, 100, 80],
-                        data: [100],
+                        data: coinAmmounts,
                         borderWidth: 0,
                         backgroundColor: [
                             '#723ac3',
                             "#864DD9",
                             "#9762e6",
-                            "#a678eb"
+                            "#a678eb",
+                            "#f2a2ad",
+                            "#ef8c99",
+                            "#ec7585",
+                            "#e95f71"
+
+                            //"#E95F71"
                         ],
                         hoverBackgroundColor: [
                             '#723ac3',
                             "#864DD9",
                             "#9762e6",
-                            "#a678eb"
+                            "#a678eb",
+                            "#f2a2ad",
+                            "#ef8c99",
+                            "#ec7585",
+                            "#e95f71"
                         ]
                     }]
             }
