@@ -36,7 +36,7 @@ $(document).ready(function () {
             //coin = coin.match(/(?:\()[^\(\)]*?(?:\))/g);
             //coin = coin.replace(/[{()}]/g, '')
             console.log(coin)
-            $.post("http://localhost:8080/change_coin", { coin: coin }, function (data) {
+            $.post("http://server.cryptoquarry.net:8080/change_coin", { coin: coin }, function (data) {
                 if (data === 'done') {
                     toastr.options = {
                         "closeButton": true,

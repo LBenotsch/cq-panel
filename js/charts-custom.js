@@ -614,7 +614,7 @@ $(document).ready(function () {
             var copayWalletBalanceUSD = Math.round((walletBalanceBTC * currentBTCPrice) * 100) / 100
 
             //Get binance wallet balance by api key. Uses backend service that has private key
-            var url2 = "http://localhost:8080/binance?key=hnFOruusrwhV5HJRDM2dQGZ1B5Oxv2gow4Eigjgdgs7JukbCG9ln4QLktOLUwB1N"
+            var url2 = "http://server.cryptoquarry.net:8080/binance?key=hnFOruusrwhV5HJRDM2dQGZ1B5Oxv2gow4Eigjgdgs7JukbCG9ln4QLktOLUwB1N"
             $.getJSON(url2, function (data) {
                 var binanceWalletBalanceUSD = Math.round((data[0].free * currentBTCPrice) * 100) / 100
 
