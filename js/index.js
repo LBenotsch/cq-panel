@@ -5,20 +5,73 @@ $(document).ready(function () {
     });
 
     //Displays tooltip on "save changeds" button specified in html
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
+    // $(function () {
+    //     $('[data-toggle="tooltip"]').tooltip();
+    // });
+
+    var coin;
+    $("#change_coin").click(function () {
+        coin = document.getElementById("options").textContent;
+        if (coin.trim() == "Select a coin to mine" || "" || null) {
+            //alert("Please select a coin"); //TODO: change to something more nice (Toast)
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-bottom-left",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "5000",
+                "hideDuration": "5000",
+                "timeOut": "5000",
+                "extendedTimeOut": "5000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+            toastr.error("Please select a coin")
+        } else {
+            //coin = coin.match(/(?:\()[^\(\)]*?(?:\))/g);
+            //coin = coin.replace(/[{()}]/g, '')
+            console.log(coin)
+            $.post("http://localhost:8080/change_coin", { coin: coin }, function (data) {
+                if (data === 'done') {
+                    toastr.options = {
+                        "closeButton": true,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": false,
+                        "positionClass": "toast-bottom-left",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "30000",
+                        "hideDuration": "30000",
+                        "timeOut": "30000",
+                        "extendedTimeOut": "10000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    }
+                    toastr.success("Coin saved. Changing rigs to: " + coin + ". Changes will take effect in about 5 mins.");
+                }
+            });
+        }
     });
 });
 
 //Pulls json data
-var text = $.getJSON('http://34.224.90.223/panel.json', function () {
-    var preobj = JSON.parse(text.responseText);
-    var obj = preobj.rigs;
+var url = "http://34.224.90.223/panel.json"
+$.getJSON(url, function (data, status) {
+    //var preobj = JSON.parse(text.responseText);
+    var obj = data.rigs;
 
     //Fill data for top blocks
     document.getElementById("active-miners").innerHTML = data.alive_rigs + "/" + data.total_rigs;
     document.getElementById("active-gpus").innerHTML = data.alive_gpus;
-    document.getElementById("total-hash").innerHTML = Math.round(hashrate);
+    document.getElementById("total-hash").innerHTML = Math.round(data.total_hash);
     document.getElementById("avg-gpu-temp").innerHTML = Math.round(data.avg_temp) + "c";
 
     //Fill miner details table
@@ -59,4 +112,5 @@ var text = $.getJSON('http://34.224.90.223/panel.json', function () {
     }
     k += '</tbody>';
     document.getElementById('tableData').innerHTML = k;
-});
+})
+    .fail(function () { alert('getJSON request failed! For ' + url); });

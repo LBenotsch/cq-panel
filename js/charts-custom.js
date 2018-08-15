@@ -1,8 +1,5 @@
 /*global $, document*/
 $(document).ready(function () {
-
-    'use strict';
-
     Chart.defaults.global.defaultFontColor = '#75787c';
 
     // ------------------------------------------------------- //
@@ -488,9 +485,10 @@ $(document).ready(function () {
     // Pie Chart Custom 1
     // ------------------------------------------------------ //
 
-    var text = $.getJSON('http://34.224.90.223/panel.json', function () {
-        var preobj = JSON.parse(text.responseText);
-        var obj = preobj.rigs;
+    var url = "http://34.224.90.223/panel.json"
+    $.getJSON(url, function (text, status) {
+        //var preobj = JSON.parse(text.responseText);
+        var obj = text.rigs;
 
         var ethRigs = 0;
         var etcRigs = 0;
@@ -597,72 +595,73 @@ $(document).ready(function () {
                     }]
             }
         });
-    });
+    })
+        .fail(function () { alert('getJSON request failed! For '+url); });
 
     // ------------------------------------------------------- //
     // Pie Chart Custom 2
     // ------------------------------------------------------ //
 
-    //Get wallet balance by public key - Begin
-    var publicKey = "xpub6Bs4K9xiZBFZ9WQpiAXdnkSvRFZT37EuUUdESah1h9SSJ2kjypLCSNVejjekPgZeFPMQ5mqukZpsBhg262SGpDftfphLzUXzmTGVjFuuvAi"
-    var url = "https://blockchain.info/balance?active="+publicKey+"&cors=true"
-    var data = $.getJSON(url, function (data) {
-        var walletBalanceBTCRaw = data.xpub6Bs4K9xiZBFZ9WQpiAXdnkSvRFZT37EuUUdESah1h9SSJ2kjypLCSNVejjekPgZeFPMQ5mqukZpsBhg262SGpDftfphLzUXzmTGVjFuuvAi.final_balance
-        var walletBalanceBTC = (walletBalanceBTCRaw * 0.00000001)
-        var data = $.getJSON('https://blockchain.info/ticker', function (data) {
-        var walletBalanceUSD = Math.round((walletBalanceBTC * data.USD.last)* 100) / 100
-    //Get wallet balance by public key - End
+    $.getJSON('https://blockchain.info/ticker', function (data) {
+        var currentBTCPrice = data.USD.last;
 
-            var PIECHARTEXMPLE = $('#pieChartCustom2');
-            var pieChartExample = new Chart(PIECHARTEXMPLE, {
-                type: 'pie',
-                options: {
-                    legend: {
-                        display: true,
-                        position: "left"
+        //Get wallet balance by public key
+        var publicKey = "xpub6Bs4K9xiZBFZ9WQpiAXdnkSvRFZT37EuUUdESah1h9SSJ2kjypLCSNVejjekPgZeFPMQ5mqukZpsBhg262SGpDftfphLzUXzmTGVjFuuvAi"
+        var url = "https://blockchain.info/balance?active=" + publicKey + "&cors=true"
+        $.getJSON(url, function (data) {
+            var walletBalanceBTCRaw = data[publicKey].final_balance
+            var walletBalanceBTC = (walletBalanceBTCRaw * 0.00000001)
+            var copayWalletBalanceUSD = Math.round((walletBalanceBTC * currentBTCPrice) * 100) / 100
+
+            //Get binance wallet balance by api key. Uses backend service that has private key
+            var url2 = "http://localhost:8080/binance?key=hnFOruusrwhV5HJRDM2dQGZ1B5Oxv2gow4Eigjgdgs7JukbCG9ln4QLktOLUwB1N"
+            $.getJSON(url2, function (data) {
+                var binanceWalletBalanceUSD = Math.round((data[0].free * currentBTCPrice) * 100) / 100
+
+                //Debug
+                //copayWalletBalanceUSD = 10
+                //binanceWalletBalanceUSD = 10
+
+                var wallets = ["Cold Storage", "Binance"];
+                var walletAmmounts = [copayWalletBalanceUSD, binanceWalletBalanceUSD];
+
+                var PIECHARTEXMPLE = $('#pieChartCustom2');
+                var pieChartExample = new Chart(PIECHARTEXMPLE, {
+                    type: 'pie',
+                    options: {
+                        legend: {
+                            display: true,
+                            position: "left"
+                        }
+                    },
+                    data: {
+                        labels: wallets,
+                        datasets: [
+                            {
+                                data: walletAmmounts,
+                                borderWidth: 0,
+                                backgroundColor: [
+                                    "#e7a9f6",
+                                    "#cf53ed",
+                                    "#e95f71",
+                                ],
+                                hoverBackgroundColor: [
+                                    "#e7a9f6",
+                                    "#cf53ed",
+                                    "#e95f71",
+                                ]
+                            }]
                     }
-                },
-                data: {
-                    labels: [
-                        "Copay BTC",
-                    ],
-                    datasets: [
-                        {
-                            data: [walletBalanceUSD],
-                            borderWidth: 0,
-                            backgroundColor: [
-                                "#cf53ed",
-                                "#d364ee",
-                                "#d875f0",
-                                "#dd86f2",
-                                '#e297f4',
-                                "#e7a9f6",
-                                "#f2a2ad",
-                                "#ef8c99",
-                                "#ec7585",
-                                "#e95f71",
-                            ],
-                            hoverBackgroundColor: [
-                                "#cf53ed",
-                                "#d364ee",
-                                "#d875f0",
-                                "#dd86f2",
-                                '#e297f4',
-                                "#e7a9f6",
-                                "#f2a2ad",
-                                "#ef8c99",
-                                "#ec7585",
-                                "#e95f71",
-                            ]
-                        }]
-                }
+                });
+
+                var pieChartExample = {
+                    responsive: true
+                };
             });
-            
-            var pieChartExample = {
-                responsive: true
-            };
         });
     });
+});
+
 
     // ------------------------------------------------------- //
     // Doughnut Chart Custom
@@ -826,7 +825,3 @@ $(document).ready(function () {
     // var radarChartExample = {
     //     responsive: true
     // };
-
-
-
-});
