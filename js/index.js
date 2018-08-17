@@ -1,19 +1,29 @@
+document.getElementById('change_coin').disabled = true;
+
 $(document).ready(function () {
+
     //Dropdown keeps selected text in box
     $(".dropdown-menu li a").click(function () {
         $("#options").text($(this).text());
+        $.get('http://server.cryptoquarry.net:8080/which_coin', function (data) {
+            var coin = document.getElementById("options").textContent
+            if (coin == data) {
+                document.getElementById("change_coin").disabled = true;
+            } else {
+                document.getElementById("change_coin").disabled = false;
+            }
+        });
     });
-
-    //Displays tooltip on "save changeds" button specified in html
-    // $(function () {
-    //     $('[data-toggle="tooltip"]').tooltip();
-    // });
 
     var coin;
     $("#change_coin").click(function () {
+        jQuery("#change_coin").html('<i class="fa fa-circle-o-notch fa-spin"></i> Changing Coins');
+        document.getElementById('change_coin').disabled = true;
+        document.getElementById('options').disabled = true;
+
+
         coin = document.getElementById("options").textContent;
-        if (coin.trim() == "Select a coin to mine" || "" || null) {
-            //alert("Please select a coin"); //TODO: change to something more nice (Toast)
+        if (coin.trim() == "Select a coin to mine" || coin.trim() == "" || coin.trim() == null) {
             toastr.options = {
                 "closeButton": true,
                 "debug": false,
@@ -33,9 +43,6 @@ $(document).ready(function () {
             }
             toastr.error("Please select a coin")
         } else {
-            //coin = coin.match(/(?:\()[^\(\)]*?(?:\))/g);
-            //coin = coin.replace(/[{()}]/g, '')
-            console.log(coin)
             $.post("http://server.cryptoquarry.net:8080/change_coin", { coin: coin }, function (data) {
                 if (data === 'done') {
                     toastr.options = {
@@ -55,11 +62,16 @@ $(document).ready(function () {
                         "showMethod": "fadeIn",
                         "hideMethod": "fadeOut"
                     }
-                    toastr.success("Coin saved. Changing rigs to: " + coin + ". Changes will take effect in about 5 mins.");
+                    toastr.success("Coin saved. Changing rigs to: " + coin + ". Changes will take effect in about 5 minutes.");
                 }
             });
         }
     });
+});
+
+//Dropdown first pulls the last selected coin
+$.get('http://server.cryptoquarry.net:8080/which_coin', function (data) {
+    document.getElementById("options").textContent = data;
 });
 
 //Pulls json data
