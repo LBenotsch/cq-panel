@@ -5,7 +5,7 @@ $(document).ready(function () {
     //Dropdown keeps selected text in box
     $(".dropdown-menu li a").click(function () {
         $("#options").text($(this).text());
-        $.get('http://server.cryptoquarry.net:8080/which_coin', function (data) {
+        $.get(NODE_BACKEND_URL + 'which_coin', function (data) {
             var coin = document.getElementById("options").textContent
             if (coin == data) {
                 document.getElementById("change_coin").disabled = true;
@@ -47,7 +47,7 @@ $(document).ready(function () {
                 jQuery("#change_coin").html('Save changes');
                 document.getElementById('options').disabled = false;
             }, 300000); //5 mins
-            $.post("http://server.cryptoquarry.net:8080/change_coin", { coin: coin }, function (data) {
+            $.post(NODE_BACKEND_URL + "change_coin", { coin: coin }, function (data) {
                 if (data === 'done') {
                     toastr.options = {
                         "closeButton": true,
@@ -74,13 +74,12 @@ $(document).ready(function () {
 });
 
 //Dropdown first pulls the last selected coin
-$.get('http://server.cryptoquarry.net:8080/which_coin', function (data) {
+$.get(NODE_BACKEND_URL + 'which_coin', function (data) {
     document.getElementById("options").textContent = data;
 });
 
 //Pulls json data
-var url = "http://34.224.90.223/panel.json"
-$.getJSON(url, function (data, status) {
+$.getJSON(PANEL_JSON_URL, function (data, status) {
     //var preobj = JSON.parse(text.responseText);
     var obj = data.rigs;
 

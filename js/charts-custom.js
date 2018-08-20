@@ -485,8 +485,7 @@ $(document).ready(function () {
     // Currently Mining Pie Chart
     // ------------------------------------------------------ //
 
-    var url = "http://34.224.90.223/panel.json"
-    $.getJSON(url, function (text, status) {
+    $.getJSON(PANEL_JSON_URL, function (text, status) {
         //var preobj = JSON.parse(text.responseText);
         var obj = text.rigs;
 
@@ -606,16 +605,14 @@ $(document).ready(function () {
         var currentBTCPrice = data.USD.last;
 
         //Get wallet balance by public key
-        var publicKey = "xpub6Bs4K9xiZBFZ9WQpiAXdnkSvRFZT37EuUUdESah1h9SSJ2kjypLCSNVejjekPgZeFPMQ5mqukZpsBhg262SGpDftfphLzUXzmTGVjFuuvAi"
-        var url = "https://blockchain.info/balance?active=" + publicKey + "&cors=true"
+        var url = "https://blockchain.info/balance?active=" + COLD_WALLET_PUBLIC_KEY + "&cors=true"
         $.getJSON(url, function (data) {
-            var walletBalanceBTCRaw = data[publicKey].final_balance
-            var walletBalanceBTC = (walletBalanceBTCRaw * 0.00000001)
-            var copayWalletBalanceUSD = Math.round((walletBalanceBTC * currentBTCPrice) * 100) / 100
+            var copayWalletBalanceBTCRaw = data[COLD_WALLET_PUBLIC_KEY].final_balance
+            var copayWalletBalanceBTC = (copayWalletBalanceBTCRaw * 0.00000001)
+            var copayWalletBalanceUSD = Math.round((copayWalletBalanceBTC * currentBTCPrice) * 100) / 100
 
             //Get binance wallet balance by api key. Uses backend service that has private key
-            var url2 = "http://server.cryptoquarry.net:8080/binance?key=hnFOruusrwhV5HJRDM2dQGZ1B5Oxv2gow4Eigjgdgs7JukbCG9ln4QLktOLUwB1N"
-            $.getJSON(url2, function (data) {
+            $.getJSON(NODE_BACKEND_URL + "binance?key=" + BINANCE_PUBLIC_KEY, function (data) {
                 var binanceWalletBalanceBTC = data[0].free;
                 var binanceWalletBalanceUSD = Math.round((binanceWalletBalanceBTC * currentBTCPrice) * 100) / 100
 
