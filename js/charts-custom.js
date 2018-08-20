@@ -482,7 +482,7 @@ $(document).ready(function () {
 
 
     // ------------------------------------------------------- //
-    // Pie Chart Custom 1
+    // Currently Mining Pie Chart
     // ------------------------------------------------------ //
 
     var url = "http://34.224.90.223/panel.json"
@@ -596,10 +596,10 @@ $(document).ready(function () {
             }
         });
     })
-        .fail(function () { alert('getJSON request failed! For '+url); });
+        .fail(function () { alert('getJSON request failed! For ' + url); });
 
     // ------------------------------------------------------- //
-    // Pie Chart Custom 2
+    // Balances Pie Chart
     // ------------------------------------------------------ //
 
     $.getJSON('https://blockchain.info/ticker', function (data) {
@@ -616,7 +616,8 @@ $(document).ready(function () {
             //Get binance wallet balance by api key. Uses backend service that has private key
             var url2 = "http://server.cryptoquarry.net:8080/binance?key=hnFOruusrwhV5HJRDM2dQGZ1B5Oxv2gow4Eigjgdgs7JukbCG9ln4QLktOLUwB1N"
             $.getJSON(url2, function (data) {
-                var binanceWalletBalanceUSD = Math.round((data[0].free * currentBTCPrice) * 100) / 100
+                var binanceWalletBalanceBTC = data[0].free;
+                var binanceWalletBalanceUSD = Math.round((binanceWalletBalanceBTC * currentBTCPrice) * 100) / 100
 
                 //Debug
                 //copayWalletBalanceUSD = 10
@@ -632,6 +633,15 @@ $(document).ready(function () {
                         legend: {
                             display: true,
                             position: "left"
+                        },
+                        tooltips: {
+                            callbacks: {
+                                label: function (tooltipItem, data) {
+                                    var indice = tooltipItem.index;
+                                    return data.labels[indice] + ': $' + (data.datasets[0].data[indice]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+                                        + ' (' + Math.round((data.datasets[0].data[indice] / currentBTCPrice) * 100000) / 100000 + ' BTC)';
+                                }
+                            }
                         }
                     },
                     data: {
@@ -641,14 +651,16 @@ $(document).ready(function () {
                                 data: walletAmmounts,
                                 borderWidth: 0,
                                 backgroundColor: [
-                                    "#e7a9f6",
-                                    "#cf53ed",
-                                    "#e95f71",
+                                    '#b53dde',
+                                    "#CF53F9",
+                                    "#d06cf2",
+                                    "#de97f6"
                                 ],
                                 hoverBackgroundColor: [
-                                    "#e7a9f6",
-                                    "#cf53ed",
-                                    "#e95f71",
+                                    '#b53dde',
+                                    "#CF53F9",
+                                    "#d06cf2",
+                                    "#de97f6"
                                 ]
                             }]
                     }
