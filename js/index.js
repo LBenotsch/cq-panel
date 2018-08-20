@@ -17,13 +17,12 @@ $(document).ready(function () {
 
     var coin;
     $("#change_coin").click(function () {
-        jQuery("#change_coin").html('<i class="fa fa-circle-o-notch fa-spin"></i> Changing Coins');
         document.getElementById('change_coin').disabled = true;
         document.getElementById('options').disabled = true;
 
 
         coin = document.getElementById("options").textContent;
-        if (coin.trim() == "Select a coin to mine" || coin.trim() == "" || coin.trim() == null) {
+        if (coin.trim() == "Select a coin to mine" || coin == "" || coin == null) {
             toastr.options = {
                 "closeButton": true,
                 "debug": false,
@@ -43,6 +42,11 @@ $(document).ready(function () {
             }
             toastr.error("Please select a coin")
         } else {
+            jQuery("#change_coin").html('<i class="fa fa-circle-o-notch fa-spin"></i> Changing coins');
+            setTimeout(function () {
+                jQuery("#change_coin").html('Save changes');
+                document.getElementById('options').disabled = false;
+            }, 300000); //5 mins
             $.post("http://server.cryptoquarry.net:8080/change_coin", { coin: coin }, function (data) {
                 if (data === 'done') {
                     toastr.options = {
