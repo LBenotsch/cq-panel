@@ -148,8 +148,9 @@ $.getJSON(PANEL_JSON_URL, function (data, status) {
                 coin = 'Unknown';
         }
 
+        //Conditions that signify a GOOD miner
         if (rigs[i].condition !== "mining" && rigs[i].condition !== "throttle" && rigs[i].condition !== "autorebooted"
-        && rigs[i].condition !== "high_load") {
+        && rigs[i].condition !== "high_load" && rigs[i].condition !== "just_booted") {
             t += '<tr>';
             t += '<td>' + rigs[i].rack_loc + '</td>';
             t += '<td>' + rigs[i].ip + '</td>';
