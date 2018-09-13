@@ -17,6 +17,10 @@ $(document).ready(function () {
         var expRigs = 0;
         var ubqRigs = 0;
         for (i = 0; i < obj.length; i++) {
+            if (obj[i].hash == "0") {
+                continue;
+            }
+
             switch (obj[i].pool) {
                 case 'us1.ethermine.org:4444':
                     ethRigs++;
@@ -135,7 +139,7 @@ $(document).ready(function () {
             toastr.error("Failed to connect to json backend!");
         });
 
-        //Refresh currently mining pie every interval
+    //Refresh currently mining pie every interval
 
     // setInterval(function () {
     //     $('#pieCurrMining').replaceWith('<canvas id="pieCurrMining" </canvas>');
