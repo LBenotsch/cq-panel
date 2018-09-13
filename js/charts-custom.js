@@ -16,6 +16,7 @@ $(document).ready(function () {
         var ellaRigs = 0;
         var expRigs = 0;
         var ubqRigs = 0;
+        var unknownRigs = 0;
         for (i = 0; i < obj.length; i++) {
             if (obj[i].hash == "0") {
                 continue;
@@ -42,6 +43,9 @@ $(document).ready(function () {
                     break;
                 case 'us.ubiqpool.io:8008':
                     ubqRigs++;
+                    break;
+                default:
+                    unknownRigs++;
                     break;
             }
         }
@@ -75,6 +79,10 @@ $(document).ready(function () {
         if (ubqRigs > 0) {
             coinNames.push("UBQ")
             coinAmmounts.push(ubqRigs);
+        }
+        if (unknownRigs > 0) {
+            coinNames.push("Unknown")
+            coinAmmounts.push(unknownRigs);
         }
 
         var PIECURRMINING = $('#pieCurrMining');
