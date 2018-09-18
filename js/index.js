@@ -98,6 +98,8 @@ $(document).ready(function () {
                 });
         }
     });
+
+
 });
 
 //Dropdown first pulls the last selected coin
@@ -150,11 +152,11 @@ $.getJSON(PANEL_JSON_URL, function (data, status) {
 
         //Conditions that signify a GOOD miner
         if (rigs[i].condition !== "mining" && rigs[i].condition !== "throttle" && rigs[i].condition !== "autorebooted"
-        && rigs[i].condition !== "high_load" && rigs[i].condition !== "just_booted") {
+            && rigs[i].condition !== "high_load" && rigs[i].condition !== "just_booted") {
             t += '<tr>';
             t += '<td>' + rigs[i].rack_loc + '</td>';
             t += '<td>' + rigs[i].ip + '</td>';
-            t += '<td>' + rigs[i].miner_instance + '/' + rigs[i].gpus+ '</td>';
+            t += '<td>' + rigs[i].miner_instance + '/' + rigs[i].gpus + '</td>';
             t += '<td>' + rigs[i].hash + '</td>';
             t += '<td>' + coin + '</td>';
             t += '<td>' + rigs[i].condition + '</td>';
@@ -166,7 +168,7 @@ $.getJSON(PANEL_JSON_URL, function (data, status) {
         k += '<tr>';
         k += '<td>' + rigs[i].rack_loc + '</td>';
         k += '<td>' + rigs[i].ip + '</td>';
-        k += '<td>' + rigs[i].miner_instance + '/' + rigs[i].gpus+ '</td>';
+        k += '<td>' + rigs[i].miner_instance + '/' + rigs[i].gpus + '</td>';
         k += '<td>' + rigs[i].hash + '</td>';
         k += '<td>' + coin + '</td>';
         k += '</tr>';
@@ -176,7 +178,111 @@ $.getJSON(PANEL_JSON_URL, function (data, status) {
     t += '</tbody>';
     document.getElementById('tableData').innerHTML = k;
     document.getElementById('badMinerTableData').innerHTML = t;
-    document.getElementById('badMinerTableCount').innerHTML = "("+tTableTotal+")"
-    document.getElementById('tableCount').innerHTML = "("+kTableTotal+")"
-})
-        //.fail(function () { alert('getJSON request failed! For ' + PANEL_JSON_URL); });
+    document.getElementById('badMinerTableCount').innerHTML = "(" + tTableTotal + ")"
+    document.getElementById('tableCount').innerHTML = "(" + kTableTotal + ")"
+});
+
+//Get what's being mined
+$.getJSON(PANEL_JSON_URL, function (data, status) {
+    var obj = data.rigs;
+
+    var objNew = {
+        eth: 0,
+        etc: 0,
+        pirl: 0,
+        music: 0,
+        ella: 0,
+        exp: 0,
+        ubq: 0,
+        unknown: 0
+    }
+    for (i = 0; i < obj.length; i++) {
+        if (obj[i].hash == "0") {
+            continue;
+        }
+
+        switch (obj[i].pool) {
+            case 'us1.ethermine.org:4444':
+                objNew.eth = objNew.eth + 1;
+                break;
+            case 'us1-etc.ethermine.org:4444':
+                objNew.etc++;
+                break;
+            case 'us-east.pirlpool.eu:8004':
+                objNew.pirl++;
+                break;
+            case 'musicoin.nomnom.technology:4444':
+                objNew.music++;
+                break;
+            case 'lb.geo.ellapool.eu:8004':
+                objNew.ella++;
+                break;
+            case 'us.expmine.pro:9009':
+                objNew.exp++;
+                break;
+            case 'us.ubiqpool.io:8008':
+                objNew.ubq++;
+                break;
+            default:
+                objNew.unknown++;
+                break;
+        }
+    }
+    var keys = Object.keys(objNew);
+    var max = keys[0];
+    for (var i = 1, n = keys.length; i < n; ++i) {
+        var k = keys[i];
+        if (objNew[k] > objNew[max]) {
+            max = k;
+        }
+    }
+    console.log(max);
+    fillEstimatedProfits(max);
+});
+
+function fillEstimatedProfits(coin) {
+    if (coin == "eth") {
+        //Pulls json data
+        $.getJSON('https://api.ethermine.org/miner/0xbe4e516147882339f40712373192f2737e6012d0/currentStats', function (data, status) {
+            var obj = JSON.parse(JSON.stringify(data));
+            var usdPerMin = obj.data.usdPerMin;
+            var btcPerMin = obj.data.btcPerMin;
+
+            //Fill miner details tables
+            var k = '<tbody>';
+            k += '<tr>';
+            k += '<td>' + "Day" + '</td>'; //Period
+            k += '<td>' + "$" + (Math.round((usdPerMin * 1440) * 100) / 100).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + '</td>'; //USD
+            k += '<td>' + btcPerMin * 1440 + '</td>'; //BTC
+            k += '</tr>';
+            k += '<tr>';
+            k += '<td>' + "Month" + '</td>'; //Period
+            k += '<td>' + "$" + (Math.round((usdPerMin * 43200) * 100) / 100).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + '</td>'; //USD
+            k += '<td>' + btcPerMin * 43200 + '</td>'; //BTC
+            k += '</tr>';
+            k += '</tbody>';
+            document.getElementById('tableDataEstimatedEarnings').innerHTML = k;
+        });
+    } else if (coin == "etc") {
+        $.getJSON('https://api-etc.ethermine.org/miner/0xbe4e516147882339f40712373192f2737e6012d0/currentStats', function (data, status) {
+            var usdPerMin = data.usdPerMin;
+
+            //Fill miner details tables
+            var k = '<tbody>';
+            k += '<tr>';
+            k += '<td>' + "Day" + '</td>'; //Period
+            k += '<td>' + "$" + Math.round((0.11951004048059377 * 1440) * 100) / 100 + '</td>'; //USD
+            k += '<td>' + 0.00001916293415350352 * 1440 + '</td>'; //BTC
+            k += '</tr>';
+            k += '<tr>';
+            k += '<td>' + "Month" + '</td>';
+            k += '<td>' + "$" + Math.round((0.11951004048059377 * 43200) * 100) / 100 + '</td>'; //USD
+            k += '<td>' + 0.00001916293415350352 * 43200 + '</td>'; //BTC
+            k += '</tr>';
+            k += '</tbody>';
+            document.getElementById('tableDataEstimatedEarnings').innerHTML = k;
+        });
+    } else {
+        //coin not found
+    }
+}
