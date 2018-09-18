@@ -196,6 +196,7 @@ $.getJSON(PANEL_JSON_URL, function (data, status) {
         ubq: 0,
         unknown: 0
     }
+    //rule out bad rigs
     for (i = 0; i < obj.length; i++) {
         if (obj[i].hash == "0") {
             continue;
@@ -228,6 +229,7 @@ $.getJSON(PANEL_JSON_URL, function (data, status) {
                 break;
         }
     }
+    //get most mined coin name
     var keys = Object.keys(objNew);
     var max = keys[0];
     for (var i = 1, n = keys.length; i < n; ++i) {
