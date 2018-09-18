@@ -1,0 +1,10 @@
+SetEnvIfNoCase Request_URI "^/(index\.html)?$" PROTECT
+
+AuthType Basic
+AuthName "Password Required"
+AuthUserFile /usr/local/apache2/.htpasswd
+Require valid-user
+Satisfy any
+Order Allow,Deny
+Allow from All
+Deny from env=PROTECT
