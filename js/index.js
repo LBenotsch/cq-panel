@@ -238,7 +238,6 @@ $.getJSON(PANEL_JSON_URL, function (data, status) {
             max = k;
         }
     }
-    console.log(max);
     fillEstimatedProfits(max);
 });
 
