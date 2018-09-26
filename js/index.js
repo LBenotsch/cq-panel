@@ -266,19 +266,20 @@ function fillEstimatedProfits(coin) {
         });
     } else if (coin == "etc") {
         $.getJSON('https://api-etc.ethermine.org/miner/0xbe4e516147882339f40712373192f2737e6012d0/currentStats', function (data, status) {
-            var usdPerMin = data.usdPerMin;
+            var obj = JSON.parse(JSON.stringify(data));
+            var usdPerMin = obj.data.usdPerMin;
+            var btcPerMin = obj.data.btcPerMin;
 
-            //Fill miner details tables
             var k = '<tbody>';
             k += '<tr>';
             k += '<td>' + "Day" + '</td>'; //Period
-            k += '<td>' + "$" + Math.round((0.11951004048059377 * 1440) * 100) / 100 + '</td>'; //USD
-            k += '<td>' + 0.00001916293415350352 * 1440 + '</td>'; //BTC
+            k += '<td>' + "$" + (Math.round((usdPerMin * 1440) * 100) / 100).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + '</td>'; //USD
+            k += '<td>' + btcPerMin * 1440 + '</td>'; //BTC
             k += '</tr>';
             k += '<tr>';
-            k += '<td>' + "Month" + '</td>';
-            k += '<td>' + "$" + Math.round((0.11951004048059377 * 43200) * 100) / 100 + '</td>'; //USD
-            k += '<td>' + 0.00001916293415350352 * 43200 + '</td>'; //BTC
+            k += '<td>' + "Month" + '</td>'; //Period
+            k += '<td>' + "$" + (Math.round((usdPerMin * 43200) * 100) / 100).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + '</td>'; //USD
+            k += '<td>' + btcPerMin * 43200 + '</td>'; //BTC
             k += '</tr>';
             k += '</tbody>';
             document.getElementById('tableDataEstimatedEarnings').innerHTML = k;
