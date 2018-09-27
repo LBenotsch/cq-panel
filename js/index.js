@@ -67,7 +67,7 @@ $(document).ready(function () {
                 jQuery("#change_coin").html('Save changes');
                 document.getElementById('options').disabled = false;
             }, 300000); //5 mins
-            $.post("" + "change_coin", { coin: coin }, function (data) {
+            $.post(NODE_BACKEND_URL + "change_coin", { coin: coin }, function (data) {
                 if (data === 'done') {
                     toastr.options = {
                         "closeButton": true,
