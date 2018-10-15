@@ -286,5 +286,18 @@ function fillEstimatedProfits(coin) {
         });
     } else {
         //coin not found
+        var k = '<tbody>';
+        k += '<tr>';
+        k += '<td>' + "Day" + '</td>'; //Period
+        k += '<td>' + "NA"
+        k += '<td>' + "NA"
+        k += '</tr>';
+        k += '<tr>';
+        k += '<td>' + "Month" + '</td>'; //Period
+        k += '<td>' + "NA"
+        k += '<td>' + "NA"
+        k += '</tr>';
+        k += '</tbody>';
+        document.getElementById('tableDataEstimatedEarnings').innerHTML = k;
     }
 }
