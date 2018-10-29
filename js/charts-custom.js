@@ -281,73 +281,89 @@ $(document).ready(function () {
                 var binanceWalletBalanceBTC = data[0].free;
                 var binanceWalletBalanceUSD = Math.round((binanceWalletBalanceBTC * currentBTCPrice) * 100) / 100
 
-                //Debug
-                //copayWalletBalanceUSD = 10
-                //binanceWalletBalanceUSD = 10
+                //Get bittrex wallet balance by api key. Uses backend service that has private key
+                $.getJSON(NODE_BACKEND_URL + "bittrex?key=" + BITTREX_PUBLIC_KEY, function (data) {
+                    var bittrexWalletBalanceBTC = data;
+                    if (bittrexWalletBalanceBTC < 0) {
+                        bittrexWalletBalanceBTC = 0
+                    }
+                    var bittrexWalletBalanceUSD = Math.round((bittrexWalletBalanceBTC * currentBTCPrice) * 100) / 100
 
-                var wallets = ["Cold Storage", "Binance"];
-                var walletAmmounts = [copayWalletBalanceUSD, binanceWalletBalanceUSD];
+                    //Debug
+                    //copayWalletBalanceUSD = 10
+                    //binanceWalletBalanceUSD = 10
+                    //bittrexWalletBalanceUSD = 10
 
-                var PIEBALANCES = $('#pieBalances');
-                var pieBalances = new Chart(PIEBALANCES, {
-                    type: 'pie',
-                    options: {
-                        legend: {
-                            display: true,
-                            position: "left"
-                        },
-                        tooltips: {
-                            callbacks: {
-                                label: function (tooltipItem, data) {
-                                    var indice = tooltipItem.index;
-                                    return data.labels[indice] + ': $' + (data.datasets[0].data[indice]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
-                                        + ' (' + Math.round((data.datasets[0].data[indice] / currentBTCPrice) * 100000) / 100000 + ' BTC)';
+                    // var wallets = ["Copay", "Bittrex"];
+                    // var walletAmmounts = [copayWalletBalanceUSD, binanceWalletBalanceUSD];
+
+                    var total = binanceWalletBalanceUSD + bittrexWalletBalanceUSD;
+                    document.getElementById('total-balance').innerHTML = "$" + total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+
+                    var wallets = ["Binance", "Bittrex"];
+                    var walletAmmounts = [binanceWalletBalanceUSD, bittrexWalletBalanceUSD];
+
+                    var PIEBALANCES = $('#pieBalances');
+                    var pieBalances = new Chart(PIEBALANCES, {
+                        type: 'pie',
+                        options: {
+                            legend: {
+                                display: true,
+                                position: "left"
+                            },
+                            tooltips: {
+                                callbacks: {
+                                    label: function (tooltipItem, data) {
+                                        var indice = tooltipItem.index;
+                                        return data.labels[indice] + ': $' + (data.datasets[0].data[indice]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+                                            + ' (' + Math.round((data.datasets[0].data[indice] / currentBTCPrice) * 100000) / 100000 + ' BTC)';
+                                    }
                                 }
                             }
+                        },
+                        data: {
+                            labels: wallets,
+                            datasets: [
+                                {
+                                    data: walletAmmounts,
+                                    borderWidth: 0,
+                                    backgroundColor: [
+                                        '#b53dde',
+                                        "#CF53F9",
+                                        "#d06cf2",
+                                        "#de97f6"
+                                    ],
+                                    hoverBackgroundColor: [
+                                        '#b53dde',
+                                        "#CF53F9",
+                                        "#d06cf2",
+                                        "#de97f6"
+                                    ]
+                                }]
                         }
-                    },
-                    data: {
-                        labels: wallets,
-                        datasets: [
-                            {
-                                data: walletAmmounts,
-                                borderWidth: 0,
-                                backgroundColor: [
-                                    '#b53dde',
-                                    "#CF53F9",
-                                    "#d06cf2",
-                                    "#de97f6"
-                                ],
-                                hoverBackgroundColor: [
-                                    '#b53dde',
-                                    "#CF53F9",
-                                    "#d06cf2",
-                                    "#de97f6"
-                                ]
-                            }]
-                    }
-                });
-            })
-                .fail(function (response) {
-                    toastr.options = {
-                        "closeButton": true,
-                        "debug": false,
-                        "newestOnTop": false,
-                        "progressBar": false,
-                        "positionClass": "toast-bottom-left",
-                        "preventDuplicates": false,
-                        "onclick": null,
-                        "showDuration": "5000",
-                        "hideDuration": "5000",
-                        "timeOut": "5000",
-                        "extendedTimeOut": "5000",
-                        "showEasing": "swing",
-                        "hideEasing": "linear",
-                        "showMethod": "fadeIn",
-                        "hideMethod": "fadeOut"
-                    }
-                    toastr.error("Failed to connect to panel backend!");
-                });
+                    });
+                })
+                    .fail(function (response) {
+                        toastr.options = {
+                            "closeButton": true,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": false,
+                            "positionClass": "toast-bottom-left",
+                            "preventDuplicates": false,
+                            "onclick": null,
+                            "showDuration": "5000",
+                            "hideDuration": "5000",
+                            "timeOut": "5000",
+                            "extendedTimeOut": "5000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        }
+                        toastr.error("Failed to connect to panel backend!");
+                    });
+            });
         });
     });
 });
