@@ -167,6 +167,9 @@ $.getJSON(PANEL_JSON_URL, function (data, status) {
 
         k += '<tr>';
         k += '<td>' + rigs[i].rack_loc + '</td>';
+        k += '<td> <button type="button" onclick="highlight(this)" id=btnRebootRig' + rigs[i].rack_loc + ' class="icon-logout btn btn-primary-outline" data-toggle="tooltip" data-placement="top" title="Reboot"></button>' +
+            ' <button type="button" onclick="highlight(this)" id=btnDownclockRig' + rigs[i].rack_loc + ' class="icon-dashboard btn btn-primary-outline" data-toggle="tooltip" data-placement="top" title="Downclock"></button>'
+            + '</td>';
         k += '<td>' + rigs[i].ip + '</td>';
         k += '<td>' + rigs[i].miner_instance + '/' + rigs[i].gpus + '</td>';
         k += '<td>' + rigs[i].hash + '</td>';

@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
   <!-- Custom Font Icons CSS-->
   <link rel="stylesheet" href="css/font.css">
+  <link rel="stylesheet" href="icons-reference/styles.css">
   <!-- Google fonts - Muli-->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,700">
   <!-- theme stylesheet-->
@@ -31,6 +32,27 @@
   <style>
     .btn.btn-outline-secondary.dropdown-toggle {
       min-width: 185px !important;
+    }
+    .btn-primary-outline.dropdown-toggle {
+      min-width: 185px !important;
+    }
+    .btn-primary-outline {
+      background-color: transparent;
+      color: #e95f71;
+      padding: 0px 5px;
+    }
+    #btnBottomRight {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 30px;
+      z-index: 99;
+      font-size: 18px;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 15px;
+      border-radius: 4px;
     }
   </style>
 </head>
@@ -170,7 +192,7 @@
                 <div class="pie-chart chart margin-bottom-sm">
                   <canvas id="pieBalances"></canvas>
                 </div>
-                Total USD:  <strong><b id="total-balance"></b></strong>
+                Total USD: <strong><b id="total-balance"></b></strong>
               </div>
             </div>
           </div>
@@ -305,6 +327,7 @@
                 <thead>
                   <tr>
                     <th>Name</th>
+                    <th>Controls</th>
                     <th>IP Address</th>
                     <th>GPUs</th>
                     <th>Total Hashrate</th>
@@ -328,7 +351,34 @@
       </footer>
     </div>
   </div>
-  <!-- JavaScript files-->
+  <script>
+    //Control buttons in table
+    var buttonClicked = null;
+    var btnCount = 0;
+    function highlight(element) {
+      buttonClicked = element;
+      if (buttonClicked.style.color == "black") {
+        //deselected
+        buttonClicked.style.background = "transparent";
+        buttonClicked.style.color = "#e95f71";
+        btnCount--;
+      } else {
+        //selected
+        buttonClicked.style.background = "#e95f71";
+        buttonClicked.style.color = "black";
+        btnCount++;
+      }
+      //Submit button following scroll at bottom right
+      if (btnCount > 0) {
+        document.getElementById("btnBottomRight").style.display = "block";
+      } else {
+        document.getElementById("btnBottomRight").style.display = "none";
+      }
+    }
+
+    //$('[data-toggle="tooltip"]').tooltip(); 
+  </script>
+    <!-- JavaScript files-->
   <script src="js/globalvars.js"></script>
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/popper.js/umd/popper.min.js"> </script>
@@ -342,8 +392,9 @@
   <script src="js/charts-custom.js"></script>
   <script src="js/index.js"></script>
   <script src="js/toastr.min.js"></script>
-  <script src="js/jsonhelper.js"></script>
 
+  <!-- Submit button for controls-->
+  <button onclick="testFunction()" class="btn btn-primary" id="btnBottomRight">Submit</button>
 </body>
 
 </html>
