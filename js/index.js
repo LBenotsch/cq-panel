@@ -163,7 +163,7 @@ $.getJSON(PANEL_JSON_URL, function (data, status) {
             t += '<td>' + rigs[i].hash + '</td>';
             t += '<td>' + coin + '</td>';
             t += '<td>' + rigs[i].condition + '</td>';
-            t += '<td>' + Math.round(rigs[i].miner_secs / 86400) + '</td>';
+            t += '<td>' + Math.round(rigs[i].miner_secs / 86400) / 10 + '</td>';
             t += '</tr>';
             tTableTotal++;
             continue;
