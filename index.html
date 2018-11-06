@@ -360,24 +360,37 @@
     </div>
   </div>
   <script>
+    function removeA(arr) {
+      var what, a = arguments, L = a.length, ax;
+      while (L > 1 && arr.length) {
+        what = a[--L];
+        while ((ax = arr.indexOf(what)) !== -1) {
+          arr.splice(ax, 1);
+        }
+      }
+      return arr;
+    }
+
     //Control buttons in table
     var buttonClicked = null;
-    var btnCount = 0;
+    var rigControlObj = [];
     function highlight(element) {
       buttonClicked = element;
       if (buttonClicked.style.color == "black") {
         //deselected
         buttonClicked.style.background = "transparent";
         buttonClicked.style.color = "#e95f71";
-        btnCount--;
+        removeA(rigControlObj, element.id);
+        //console.log(rigControlObj);
       } else {
         //selected
         buttonClicked.style.background = "#e95f71";
         buttonClicked.style.color = "black";
-        btnCount++;
+        rigControlObj.push(element.id);
+        //console.log(rigControlObj);
       }
       //Submit button following scroll at bottom right
-      if (btnCount > 0) {
+      if (rigControlObj.length > 0) {
         document.getElementById("btnBottomLeft").style.display = "block";
       } else {
         document.getElementById("btnBottomLeft").style.display = "none";
