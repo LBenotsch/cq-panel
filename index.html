@@ -41,11 +41,11 @@
       color: #e95f71;
       padding: 0px 5px;
     }
-    #btnBottomRight {
+    #btnBottomLeft {
       display: none;
       position: fixed;
       bottom: 20px;
-      right: 30px;
+      left: 30px;
       z-index: 99;
       font-size: 18px;
       border: none;
@@ -180,8 +180,7 @@
                 <div class="pie-chart chart margin-bottom-sm">
                   <canvas id="pieCurrMining"></canvas>
                 </div>
-                <!-- Total Miners:  <strong><b id="active-miners"></b></strong> -->
-                <br>
+                <!-- <h5>Total: <span class="badge badge-primary" id="total-mining"></span></h5> -->
               </div>
             </div>
             <div class="col-lg-6">
@@ -192,7 +191,8 @@
                 <div class="pie-chart chart margin-bottom-sm">
                   <canvas id="pieBalances"></canvas>
                 </div>
-                Total USD: <strong><b id="total-balance"></b></strong>
+                <h5>Total: <span class="badge badge-primary" id="total-balance-usd"></span>&nbsp or &nbsp<span class="badge badge-secondary"
+                    id="total-balance-btc"></span></h5>
               </div>
             </div>
           </div>
@@ -295,23 +295,28 @@
       <section>
         <div class="col-lg-12">
           <div class="block">
-            <div class="title">
-              <strong>Problem Miners</strong><i id="badMinerTableCount"></i>
+            <div class="title btn btn-outline-secondary" data-toggle="collapse" href="#collapseProblemMiners" role="button"
+              aria-expanded="false" aria-controls="collapseProblemMiners">
+              <h6><strong>Problem Miners</strong><i id="badMinerTableCount"></i></h6>
             </div>
-            <div class="table-responsive">
-              <table class="table table-striped table-hover table-sm">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>IP Address</th>
-                    <th>GPUs</th>
-                    <th>Total Hashrate</th>
-                    <th>Mining</th>
-                    <th>Condition</th>
-                  </tr>
-                </thead>
-                <tbody id="badMinerTableData"></tbody>
-              </table>
+            <div class="collapse show" id="collapseProblemMiners">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover table-sm">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Controls</th>
+                      <th>IP Address</th>
+                      <th>GPUs</th>
+                      <th>Total Hashrate</th>
+                      <th>Mining</th>
+                      <th>Condition</th>
+                      <th>Uptime (Days)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="badMinerTableData"></tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -319,23 +324,26 @@
       <section>
         <div class="col-lg-12">
           <div class="block">
-            <div class="title">
-              <strong>Miners </strong><i id="tableCount"></i>
+            <div class="title btn btn-outline-secondary" data-toggle="collapse" href="#collapseMiners" role="button"
+              aria-expanded="false" aria-controls="collapseMiners">
+              <h6><strong>Miners</strong><i id="tableCount"></i></h6>
             </div>
-            <div class="table-responsive">
-              <table class="table table-striped table-hover table-sm">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Controls</th>
-                    <th>IP Address</th>
-                    <th>GPUs</th>
-                    <th>Total Hashrate</th>
-                    <th>Mining</th>
-                  </tr>
-                </thead>
-                <tbody id="tableData"></tbody>
-              </table>
+            <div class="collapse show" id="collapseMiners">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover table-sm">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Controls</th>
+                      <th>IP Address</th>
+                      <th>GPUs</th>
+                      <th>Total Hashrate</th>
+                      <th>Mining</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tableData"></tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -370,15 +378,15 @@
       }
       //Submit button following scroll at bottom right
       if (btnCount > 0) {
-        document.getElementById("btnBottomRight").style.display = "block";
+        document.getElementById("btnBottomLeft").style.display = "block";
       } else {
-        document.getElementById("btnBottomRight").style.display = "none";
+        document.getElementById("btnBottomLeft").style.display = "none";
       }
     }
 
     //$('[data-toggle="tooltip"]').tooltip(); 
   </script>
-    <!-- JavaScript files-->
+  <!-- JavaScript files-->
   <script src="js/globalvars.js"></script>
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/popper.js/umd/popper.min.js"> </script>
@@ -394,7 +402,7 @@
   <script src="js/toastr.min.js"></script>
 
   <!-- Submit button for controls-->
-  <button onclick="testFunction()" class="btn btn-primary" id="btnBottomRight">Submit</button>
+  <button onclick="testFunction()" class="btn btn-primary" id="btnBottomLeft">Submit</button>
 </body>
 
 </html>

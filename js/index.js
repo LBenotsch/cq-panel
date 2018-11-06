@@ -155,11 +155,15 @@ $.getJSON(PANEL_JSON_URL, function (data, status) {
             && rigs[i].condition !== "high_load" && rigs[i].condition !== "just_booted") {
             t += '<tr>';
             t += '<td>' + rigs[i].rack_loc + '</td>';
+            t += '<td> <button type="button" onclick="highlight(this)" id=btnRebootRig' + rigs[i].rack_loc + ' class="icon-logout btn btn-primary-outline" data-toggle="tooltip" data-placement="top" title="Reboot"></button>' +
+            ' <button type="button" onclick="highlight(this)" id=btnDownclockRig' + rigs[i].rack_loc + ' class="icon-dashboard btn btn-primary-outline" data-toggle="tooltip" data-placement="top" title="Downclock"></button>'
+            + '</td>';
             t += '<td>' + rigs[i].ip + '</td>';
             t += '<td>' + rigs[i].miner_instance + '/' + rigs[i].gpus + '</td>';
             t += '<td>' + rigs[i].hash + '</td>';
             t += '<td>' + coin + '</td>';
             t += '<td>' + rigs[i].condition + '</td>';
+            t += '<td>' + Math.round(rigs[i].miner_secs / 86400) + '</td>';
             t += '</tr>';
             tTableTotal++;
             continue;
