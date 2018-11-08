@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
   <!-- Custom Font Icons CSS-->
   <link rel="stylesheet" href="css/font.css">
+  <link rel="stylesheet" href="icons-reference/styles.css">
   <!-- Google fonts - Muli-->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,700">
   <!-- theme stylesheet-->
@@ -31,6 +32,27 @@
   <style>
     .btn.btn-outline-secondary.dropdown-toggle {
       min-width: 185px !important;
+    }
+    .btn-primary-outline.dropdown-toggle {
+      min-width: 185px !important;
+    }
+    .btn-primary-outline {
+      background-color: transparent;
+      color: #e95f71; 
+      padding: 0px 5px;
+    }
+    #btnBottomLeft {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      left: 30px;
+      z-index: 99;
+      font-size: 18px;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 15px;
+      border-radius: 4px;
     }
   </style>
 </head>
@@ -158,8 +180,7 @@
                 <div class="pie-chart chart margin-bottom-sm">
                   <canvas id="pieCurrMining"></canvas>
                 </div>
-                <!-- Total Miners:  <strong><b id="active-miners"></b></strong> -->
-                <br>
+                <!-- <h5>Total: <span class="badge badge-primary" id="total-mining"></span></h5> -->
               </div>
             </div>
             <div class="col-lg-6">
@@ -169,8 +190,16 @@
                 </div>
                 <div class="pie-chart chart margin-bottom-sm">
                   <canvas id="pieBalances"></canvas>
+                  <div style="display: inline;" align="center">
+                    <div style="float: left;">
+                      <h5>Total: <span class="badge badge-primary" id="total-balance-usd"></span>&nbsp or &nbsp<span
+                          class="badge badge-secondary" id="total-balance-btc"></span></h5>
+                    </div>
+                    <div style="float: right;">
+                      <button type="button" id="refreshBalancePie" onclick="refreshBallancePie()" class="btn btn-primary btn-sm">Refresh</button>
+                    </div>
+                  </div>
                 </div>
-                Total USD:  <strong><b id="total-balance"></b></strong>
               </div>
             </div>
           </div>
@@ -274,45 +303,56 @@
         <div class="col-lg-12">
           <div class="block">
             <div class="title">
-              <strong>Problem Miners</strong><i id="badMinerTableCount"></i>
+              <div class="btn btn-outline-secondary" data-toggle="collapse" href="#collapseProblemMiners" role="button"
+                aria-expanded="false" aria-controls="collapseProblemMiners">
+                <h6><strong>Problem Miners</strong><i id="badMinerTableCount"></i></h6>
+              </div>
+              &nbsp<button onclick="testFunction()" class="btn btn-primary" id="" disabled>Reboot All</button>
+              <div class="collapse show" id="collapseProblemMiners">
+                <div class="table-responsive">
+                  <table class="table table-striped table-hover table-sm">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Controls</th>
+                        <th>IP Address</th>
+                        <th>GPUs</th>
+                        <th>Total Hashrate</th>
+                        <th>Mining</th>
+                        <th>Condition</th>
+                        <th>Uptime (Days)</th>
+                      </tr>
+                    </thead>
+                    <tbody id="badMinerTableData"></tbody>
+                  </table>
+                </div>
+              </div>
             </div>
-            <div class="table-responsive">
-              <table class="table table-striped table-hover table-sm">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>IP Address</th>
-                    <th>GPUs</th>
-                    <th>Total Hashrate</th>
-                    <th>Mining</th>
-                    <th>Condition</th>
-                  </tr>
-                </thead>
-                <tbody id="badMinerTableData"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
       </section>
       <section>
         <div class="col-lg-12">
           <div class="block">
-            <div class="title">
-              <strong>Miners </strong><i id="tableCount"></i>
+            <div class="title btn btn-outline-secondary" data-toggle="collapse" href="#collapseMiners" role="button"
+              aria-expanded="false" aria-controls="collapseMiners">
+              <h6><strong>Miners</strong><i id="tableCount"></i></h6>
             </div>
-            <div class="table-responsive">
-              <table class="table table-striped table-hover table-sm">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>IP Address</th>
-                    <th>GPUs</th>
-                    <th>Total Hashrate</th>
-                    <th>Mining</th>
-                  </tr>
-                </thead>
-                <tbody id="tableData"></tbody>
-              </table>
+            <div class="collapse show" id="collapseMiners">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover table-sm">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Controls</th>
+                      <th>IP Address</th>
+                      <th>GPUs</th>
+                      <th>Total Hashrate</th>
+                      <th>Mining</th>
+                      <th>Uptime (Days)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tableData"></tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -328,6 +368,63 @@
       </footer>
     </div>
   </div>
+  <script>
+    function removeA(arr) {
+      var what, a = arguments, L = a.length, ax;
+      while (L > 1 && arr.length) {
+        what = a[--L];
+        while ((ax = arr.indexOf(what)) !== -1) {
+          arr.splice(ax, 1);
+        }
+      }
+      return arr;
+    }
+
+    function getSecondPart(str) {
+      return str.split('_')[1];
+    }
+
+    //Control buttons in table
+    var buttonClicked = null;
+    var rigControlObj = [];
+    function highlight(element) {
+      buttonClicked = element;
+      if (buttonClicked.style.color == "black") { //deselected
+        if (element.id.includes("downclock")) { //if downclock deselected, downclock the same rigs reboot button and enable it again
+          var relatedRebootId = "reboot_" + getSecondPart(element.id);
+          var relatedRebootElement = document.getElementById(relatedRebootId);
+          relatedRebootElement.style.background = "transparent";
+          relatedRebootElement.style.color = "#e95f71";
+          relatedRebootElement.disabled = false;
+        }
+        buttonClicked.style.background = "transparent";
+        buttonClicked.style.color = "#e95f71";
+        removeA(rigControlObj, element.id);
+        console.log(rigControlObj); //debug
+      } else { //selected
+        if (element.id.includes("downclock")) { //if downclock selected, select the same rigs reboot button and disables it
+          var relatedRebootId = "reboot_" + getSecondPart(element.id);
+          var relatedRebootElement = document.getElementById(relatedRebootId);
+          removeA(rigControlObj, relatedRebootId); //cleans array, downclock is already an auto reboot
+          relatedRebootElement.style.background = "#e95f71";
+          relatedRebootElement.style.color = "black";
+          relatedRebootElement.disabled = true;
+        }
+        buttonClicked.style.background = "#e95f71";
+        buttonClicked.style.color = "black";
+        rigControlObj.push(element.id);
+        console.log(rigControlObj); //debug
+      }
+      //Submit button following scroll at bottom right
+      if (rigControlObj.length > 0) {
+        document.getElementById("btnBottomLeft").style.display = "block";
+      } else {
+        document.getElementById("btnBottomLeft").style.display = "none";
+      }
+    }
+
+    //$('[data-toggle="tooltip"]').tooltip(); 
+  </script>
   <!-- JavaScript files-->
   <script src="js/globalvars.js"></script>
   <script src="vendor/jquery/jquery.min.js"></script>
@@ -342,8 +439,9 @@
   <script src="js/charts-custom.js"></script>
   <script src="js/index.js"></script>
   <script src="js/toastr.min.js"></script>
-  <script src="js/jsonhelper.js"></script>
 
+  <!-- Submit button for controls-->
+  <button onclick="postControlsArray()" class="btn btn-primary" id="btnBottomLeft">Submit</button>
 </body>
 
 </html>

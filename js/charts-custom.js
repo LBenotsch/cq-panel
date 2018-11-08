@@ -298,13 +298,14 @@ $(document).ready(function () {
                     // var walletAmmounts = [copayWalletBalanceUSD, binanceWalletBalanceUSD];
 
                     var total = binanceWalletBalanceUSD + bittrexWalletBalanceUSD;
-                    document.getElementById('total-balance').innerHTML = "$" + total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                    document.getElementById('total-balance-usd').innerHTML = "$" + total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                    document.getElementById('total-balance-btc').innerHTML = Math.round((total / currentBTCPrice) * 100000) / 100000 + ' BTC';
 
                     var wallets = ["Binance", "Bittrex"];
                     var walletAmmounts = [binanceWalletBalanceUSD, bittrexWalletBalanceUSD];
 
                     var PIEBALANCES = $('#pieBalances');
-                    var pieBalances = new Chart(PIEBALANCES, {
+                    pieBalances = new Chart(PIEBALANCES, {
                         type: 'pie',
                         options: {
                             legend: {
