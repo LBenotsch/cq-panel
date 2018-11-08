@@ -190,9 +190,16 @@
                 </div>
                 <div class="pie-chart chart margin-bottom-sm">
                   <canvas id="pieBalances"></canvas>
+                  <div style="display: inline;" align="center">
+                    <div style="float: left;">
+                      <h5>Total: <span class="badge badge-primary" id="total-balance-usd"></span>&nbsp or &nbsp<span
+                          class="badge badge-secondary" id="total-balance-btc"></span></h5>
+                    </div>
+                    <div style="float: right;">
+                      <button type="button" id="refreshBalancePie" onclick="refreshBallancePie()" class="btn btn-primary btn-sm">Refresh</button>
+                    </div>
+                  </div>
                 </div>
-                <h5>Total: <span class="badge badge-primary" id="total-balance-usd"></span>&nbsp or &nbsp<span class="badge badge-secondary"
-                    id="total-balance-btc"></span></h5>
               </div>
             </div>
           </div>

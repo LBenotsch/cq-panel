@@ -305,7 +305,7 @@ $(document).ready(function () {
                     var walletAmmounts = [binanceWalletBalanceUSD, bittrexWalletBalanceUSD];
 
                     var PIEBALANCES = $('#pieBalances');
-                    var pieBalances = new Chart(PIEBALANCES, {
+                    pieBalances = new Chart(PIEBALANCES, {
                         type: 'pie',
                         options: {
                             legend: {

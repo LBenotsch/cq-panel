@@ -1,5 +1,68 @@
 document.getElementById('change_coin').disabled = true;
 
+function removeData(chart) {
+    chart.data.labels.pop();
+    chart.data.datasets.forEach((dataset) => {
+        dataset.data.pop();
+    });
+    chart.update();
+}
+
+function addData(chart, label, data) {
+    chart.data.labels.push(label);
+    chart.data.datasets.forEach((dataset) => {
+        dataset.data.push(data);
+    });
+    chart.update();
+}
+
+function refreshBallancePie() {
+    removeData(pieBalances);
+    removeData(pieBalances);
+
+    $.getJSON('https://blockchain.info/ticker', function (data) {
+        var currentBTCPrice = data.USD.last;
+
+        //Get wallet balance by public key
+        var url = "https://blockchain.info/balance?active=" + COLD_WALLET_PUBLIC_KEY + "&cors=true"
+        $.getJSON(url, function (data) {
+            var copayWalletBalanceBTCRaw = data[COLD_WALLET_PUBLIC_KEY].final_balance
+            var copayWalletBalanceBTC = (copayWalletBalanceBTCRaw * 0.00000001)
+            var copayWalletBalanceUSD = Math.round((copayWalletBalanceBTC * currentBTCPrice) * 100) / 100
+
+            //Get binance wallet balance by api key. Uses backend service that has private key
+            $.getJSON(NODE_BACKEND_URL + "binance?key=" + BINANCE_PUBLIC_KEY, function (data) {
+                var binanceWalletBalanceBTC = data[0].free;
+                var binanceWalletBalanceUSD = Math.round((binanceWalletBalanceBTC * currentBTCPrice) * 100) / 100
+
+                //Get bittrex wallet balance by api key. Uses backend service that has private key
+                $.getJSON(NODE_BACKEND_URL + "bittrex?key=" + BITTREX_PUBLIC_KEY, function (data) {
+                    var bittrexWalletBalanceBTC = data;
+                    if (bittrexWalletBalanceBTC < 0) {
+                        bittrexWalletBalanceBTC = 0
+                    }
+                    var bittrexWalletBalanceUSD = Math.round((bittrexWalletBalanceBTC * currentBTCPrice) * 100) / 100
+
+                    //Debug
+                    //copayWalletBalanceUSD = 10
+                    //binanceWalletBalanceUSD = 10
+                    //bittrexWalletBalanceUSD = 10
+
+                    var total = binanceWalletBalanceUSD + bittrexWalletBalanceUSD;
+                    document.getElementById('total-balance-usd').innerHTML = "$" + total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                    document.getElementById('total-balance-btc').innerHTML = Math.round((total / currentBTCPrice) * 100000) / 100000 + ' BTC';
+
+                    var wallets = ["Binance", "Bittrex"];
+                    var walletAmmounts = [binanceWalletBalanceUSD, bittrexWalletBalanceUSD];
+
+                    addData(pieBalances, "Binance", binanceWalletBalanceUSD);
+                    addData(pieBalances, "Bittrex", bittrexWalletBalanceUSD);
+                })
+            })
+        })
+    });
+}
+
 $(document).ready(function () {
 
     //Dropdown keeps selected text in box

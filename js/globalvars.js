@@ -7,4 +7,6 @@ const BITTREX_PUBLIC_KEY = '078d1e09f5904381ac071a97a0685bda'
 
 // Dev
 //const NODE_BACKEND_URL = 'http://localhost:8080/'
-//const PANEL_JSON_URL = 'panel1.json'
+//const PANEL_JSON_URL = 'panel.json'
+
+var pieBalances;
