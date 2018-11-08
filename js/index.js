@@ -155,14 +155,17 @@ $.getJSON(PANEL_JSON_URL, function (data, status) {
             && rigs[i].condition !== "high_load" && rigs[i].condition !== "just_booted") {
             t += '<tr>';
             t += '<td>' + rigs[i].rack_loc + '</td>';
-            t += '<td> <button type="button" onclick="highlight(this)" id=reboot-' + rigs[i].rack_loc + ' class="icon-logout btn btn-primary-outline" data-toggle="tooltip" data-placement="top" title="Reboot"></button>' +
-                ' <button type="button" onclick="highlight(this)" id=downclock-' + rigs[i].rack_loc + ' class="icon-dashboard btn btn-primary-outline" data-toggle="tooltip" data-placement="top" title="Downclock"></button>'
+            t += '<td> <button type="button" onclick="highlight(this)" id=reboot_' + rigs[i].rack_loc + ' class="icon-logout btn btn-primary-outline" data-toggle="tooltip" data-placement="top" title="Reboot"></button>' +
+                ' <button type="button" onclick="highlight(this)" id=downclock_' + rigs[i].rack_loc + ' class="icon-dashboard btn btn-primary-outline" data-toggle="tooltip" data-placement="top" title="Downclock"></button>'
                 + '</td>';
             t += '<td>' + rigs[i].ip + '</td>';
             t += '<td>' + rigs[i].miner_instance + '/' + rigs[i].gpus + '</td>';
             t += '<td>' + rigs[i].hash + '</td>';
             t += '<td>' + coin + '</td>';
             t += '<td>' + rigs[i].condition + '</td>';
+            if ( rigs[i].condition == 'unreachable') {
+                rigs[i].uptime = 0;
+            }
             t += '<td>' + Math.round(rigs[i].uptime / 86400) + '</td>';
             t += '</tr>';
             tTableTotal++;
@@ -171,8 +174,8 @@ $.getJSON(PANEL_JSON_URL, function (data, status) {
 
         k += '<tr>';
         k += '<td>' + rigs[i].rack_loc + '</td>';
-        k += '<td> <button type="button" onclick="highlight(this)" id=reboot-' + rigs[i].rack_loc + ' class="icon-logout btn btn-primary-outline" data-toggle="tooltip" data-placement="top" title="Reboot"></button>' +
-            ' <button type="button" onclick="highlight(this)" id=downclock-' + rigs[i].rack_loc + ' class="icon-dashboard btn btn-primary-outline" data-toggle="tooltip" data-placement="top" title="Downclock"></button>'
+        k += '<td> <button type="button" onclick="highlight(this)" id=reboot_' + rigs[i].rack_loc + ' class="icon-logout btn btn-primary-outline" data-toggle="tooltip" data-placement="top" title="Reboot"></button>' +
+            ' <button type="button" onclick="highlight(this)" id=downclock_' + rigs[i].rack_loc + ' class="icon-dashboard btn btn-primary-outline" data-toggle="tooltip" data-placement="top" title="Downclock"></button>'
             + '</td>';
         k += '<td>' + rigs[i].ip + '</td>';
         k += '<td>' + rigs[i].miner_instance + '/' + rigs[i].gpus + '</td>';
