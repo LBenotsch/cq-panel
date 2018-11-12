@@ -1,4 +1,14 @@
-document.getElementById('change_coin').disabled = true;
+function postRebootAllProblemMiners() {
+    var elm = [];
+    var elms = document.getElementById("badMinerTableData").getElementsByTagName("*");
+    for (var i = 0; i < elms.length; i++) {
+        if (elms[i].id.includes("reboot")) {
+            minerReboots = elms[i].id;
+            console.log(elms[i].id);
+        }
+    }
+    console.log(minerReboots);
+}
 
 function removeData(chart) {
     chart.data.labels.pop();
@@ -62,6 +72,8 @@ function refreshBallancePie() {
         })
     });
 }
+
+document.getElementById('change_coin').disabled = true;
 
 $(document).ready(function () {
 
@@ -226,7 +238,7 @@ $.getJSON(PANEL_JSON_URL, function (data, status) {
             t += '<td>' + rigs[i].hash + '</td>';
             t += '<td>' + coin + '</td>';
             t += '<td>' + rigs[i].condition + '</td>';
-            if ( rigs[i].condition == 'unreachable') {
+            if (rigs[i].condition == 'unreachable') {
                 rigs[i].uptime = 0;
             }
             t += '<td>' + Math.round(rigs[i].uptime / 86400) + '</td>';
