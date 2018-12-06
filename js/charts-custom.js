@@ -7,97 +7,96 @@ $(document).ready(function () {
     // ------------------------------------------------------ //
 
     $.getJSON(PANEL_JSON_URL, function (data, status) {
-        var obj = data.rigs;
+            var obj = data.rigs;
 
-        var ethRigs = 0;
-        var etcRigs = 0;
-        var pirlRigs = 0;
-        var musicRigs = 0;
-        var ellaRigs = 0;
-        var expRigs = 0;
-        var ubqRigs = 0;
-        var unknownRigs = 0;
-        for (i = 0; i < obj.length; i++) {
-            if (obj[i].hash == "0") {
-                continue;
-            }
-
-            switch (obj[i].pool) {
-                case 'us1.ethermine.org:4444':
-                    ethRigs++;
-                    break;
-                case 'us1-etc.ethermine.org:4444':
-                    etcRigs++;
-                    break;
-                case 'us-east.pirlpool.eu:8004':
-                    pirlRigs++;
-                    break;
-                case 'musicoin.nomnom.technology:4444':
-                    musicRigs++;
-                    break;
-                case 'lb.geo.ellapool.eu:8004':
-                    ellaRigs++;
-                    break;
-                case 'us.expmine.pro:9009':
-                    expRigs++;
-                    break;
-                case 'us.ubiqpool.io:8008':
-                    ubqRigs++;
-                    break;
-                default:
-                    unknownRigs++;
-                    break;
-            }
-        }
-
-        var coinNames = [];
-        var coinAmmounts = [];
-        if (ethRigs > 0) {
-            coinNames.push("ETH");
-            coinAmmounts.push(ethRigs);
-        }
-        if (etcRigs > 0) {
-            coinNames.push("ETC");
-            coinAmmounts.push(etcRigs);
-        }
-        if (pirlRigs > 0) {
-            coinNames.push("PIRL");
-            coinAmmounts.push(pirlRigs);
-        }
-        if (musicRigs > 0) {
-            coinNames.push("MUSIC")
-            coinAmmounts.push(musicRigs);
-        }
-        if (ellaRigs > 0) {
-            coinNames.push("ELLA")
-            coinAmmounts.push(ellaRigs);
-        }
-        if (expRigs > 0) {
-            coinNames.push("EXP")
-            coinAmmounts.push(expRigs);
-        }
-        if (ubqRigs > 0) {
-            coinNames.push("UBQ")
-            coinAmmounts.push(ubqRigs);
-        }
-        if (unknownRigs > 0) {
-            coinNames.push("Unknown")
-            coinAmmounts.push(unknownRigs);
-        }
-
-        var PIECURRMINING = $('#pieCurrMining');
-        var pieCurrMining = new Chart(PIECURRMINING, {
-            type: 'pie',
-            options: {
-                legend: {
-                    display: true,
-                    position: "left"
+            var ethRigs = 0;
+            var etcRigs = 0;
+            var pirlRigs = 0;
+            var musicRigs = 0;
+            var ellaRigs = 0;
+            var expRigs = 0;
+            var ubqRigs = 0;
+            var unknownRigs = 0;
+            for (i = 0; i < obj.length; i++) {
+                if (obj[i].hash == "0") {
+                    continue;
                 }
-            },
-            data: {
-                labels: coinNames,
-                datasets: [
-                    {
+
+                switch (obj[i].pool) {
+                    case 'us1.ethermine.org:4444':
+                        ethRigs++;
+                        break;
+                    case 'us1-etc.ethermine.org:4444':
+                        etcRigs++;
+                        break;
+                    case 'us-east.pirlpool.eu:8004':
+                        pirlRigs++;
+                        break;
+                    case 'musicoin.nomnom.technology:4444':
+                        musicRigs++;
+                        break;
+                    case 'lb.geo.ellapool.eu:8004':
+                        ellaRigs++;
+                        break;
+                    case 'us.expmine.pro:9009':
+                        expRigs++;
+                        break;
+                    case 'us.ubiqpool.io:8008':
+                        ubqRigs++;
+                        break;
+                    default:
+                        unknownRigs++;
+                        break;
+                }
+            }
+
+            var coinNames = [];
+            var coinAmmounts = [];
+            if (ethRigs > 0) {
+                coinNames.push("ETH");
+                coinAmmounts.push(ethRigs);
+            }
+            if (etcRigs > 0) {
+                coinNames.push("ETC");
+                coinAmmounts.push(etcRigs);
+            }
+            if (pirlRigs > 0) {
+                coinNames.push("PIRL");
+                coinAmmounts.push(pirlRigs);
+            }
+            if (musicRigs > 0) {
+                coinNames.push("MUSIC")
+                coinAmmounts.push(musicRigs);
+            }
+            if (ellaRigs > 0) {
+                coinNames.push("ELLA")
+                coinAmmounts.push(ellaRigs);
+            }
+            if (expRigs > 0) {
+                coinNames.push("EXP")
+                coinAmmounts.push(expRigs);
+            }
+            if (ubqRigs > 0) {
+                coinNames.push("UBQ")
+                coinAmmounts.push(ubqRigs);
+            }
+            if (unknownRigs > 0) {
+                coinNames.push("Unknown")
+                coinAmmounts.push(unknownRigs);
+            }
+
+            var PIECURRMINING = $('#pieCurrMining');
+            var pieCurrMining = new Chart(PIECURRMINING, {
+                type: 'pie',
+                options: {
+                    legend: {
+                        display: true,
+                        position: "left"
+                    }
+                },
+                data: {
+                    labels: coinNames,
+                    datasets: [{
                         data: coinAmmounts,
                         borderWidth: 0,
                         backgroundColor: [
@@ -123,9 +122,9 @@ $(document).ready(function () {
                             "#e95f71"
                         ]
                     }]
-            }
-        });
-    })
+                }
+            });
+        })
         .fail(function () {
             toastr.options = {
                 "closeButton": true,
@@ -283,67 +282,76 @@ $(document).ready(function () {
 
                 //Get bittrex wallet balance by api key. Uses backend service that has private key
                 $.getJSON(NODE_BACKEND_URL + "bittrex?key=" + BITTREX_PUBLIC_KEY, function (data) {
-                    var bittrexWalletBalanceBTC = data;
-                    if (bittrexWalletBalanceBTC < 0) {
-                        bittrexWalletBalanceBTC = 0
-                    }
-                    var bittrexWalletBalanceUSD = Math.round((bittrexWalletBalanceBTC * currentBTCPrice) * 100) / 100
-
-                    //Debug
-                    //copayWalletBalanceUSD = 10
-                    //binanceWalletBalanceUSD = 10
-                    //bittrexWalletBalanceUSD = 10
-
-                    // var wallets = ["Copay", "Bittrex"];
-                    // var walletAmmounts = [copayWalletBalanceUSD, binanceWalletBalanceUSD];
-
-                    var total = binanceWalletBalanceUSD + bittrexWalletBalanceUSD;
-                    document.getElementById('total-balance-usd').innerHTML = "$" + total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                    document.getElementById('total-balance-btc').innerHTML = Math.round((total / currentBTCPrice) * 100000) / 100000 + ' BTC';
-
-                    var wallets = ["Binance", "Bittrex"];
-                    var walletAmmounts = [binanceWalletBalanceUSD, bittrexWalletBalanceUSD];
-
-                    var PIEBALANCES = $('#pieBalances');
-                    pieBalances = new Chart(PIEBALANCES, {
-                        type: 'pie',
-                        options: {
-                            legend: {
-                                display: true,
-                                position: "left"
-                            },
-                            tooltips: {
-                                callbacks: {
-                                    label: function (tooltipItem, data) {
-                                        var indice = tooltipItem.index;
-                                        return data.labels[indice] + ': $' + (data.datasets[0].data[indice]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
-                                            + ' (' + Math.round((data.datasets[0].data[indice] / currentBTCPrice) * 100000) / 100000 + ' BTC)';
-                                    }
-                                }
-                            }
-                        },
-                        data: {
-                            labels: wallets,
-                            datasets: [
-                                {
-                                    data: walletAmmounts,
-                                    borderWidth: 0,
-                                    backgroundColor: [
-                                        '#b53dde',
-                                        "#CF53F9",
-                                        "#d06cf2",
-                                        "#de97f6"
-                                    ],
-                                    hoverBackgroundColor: [
-                                        '#b53dde',
-                                        "#CF53F9",
-                                        "#d06cf2",
-                                        "#de97f6"
-                                    ]
-                                }]
+                        var bittrexWalletBalanceBTC = data;
+                        if (bittrexWalletBalanceBTC < 0) {
+                            bittrexWalletBalanceBTC = 0
                         }
-                    });
-                })
+                        var bittrexWalletBalanceUSD = Math.round((bittrexWalletBalanceBTC * currentBTCPrice) * 100) / 100
+
+                        //Get cryptopia wallet balance by api key. Uses backend service that has private key
+                        $.getJSON(NODE_BACKEND_URL + "cryptopia?key=" + CRYPTOPIA_PUBLIC_KEY, function (data) {
+                            var cryptopiaWalletBalanceBTC = data;
+                            if (cryptopiaWalletBalanceBTC < 0) {
+                                cryptopiaWalletBalanceBTC = 0
+                            }
+                            var cryptopiaWalletBalanceUSD = Math.round((cryptopiaWalletBalanceBTC * currentBTCPrice) * 100) / 100
+
+                            //Debug
+                            //copayWalletBalanceUSD = 10
+                            //binanceWalletBalanceUSD = 10
+                            //bittrexWalletBalanceUSD = 10
+
+                            // var wallets = ["Copay", "Bittrex"];
+                            // var walletAmmounts = [copayWalletBalanceUSD, binanceWalletBalanceUSD];
+
+                            var total = binanceWalletBalanceUSD + bittrexWalletBalanceUSD + cryptopiaWalletBalanceUSD;
+                            document.getElementById('total-balance-usd').innerHTML = "$" + total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                            document.getElementById('total-balance-btc').innerHTML = Math.round((total / currentBTCPrice) * 100000) / 100000 + ' BTC';
+
+                            var wallets = ["Binance", "Bittrex", "Cryptopia"];
+                            var walletAmmounts = [binanceWalletBalanceUSD, bittrexWalletBalanceUSD, cryptopiaWalletBalanceUSD];
+
+                            var PIEBALANCES = $('#pieBalances');
+                            pieBalances = new Chart(PIEBALANCES, {
+                                type: 'pie',
+                                options: {
+                                    legend: {
+                                        display: true,
+                                        position: "left"
+                                    },
+                                    tooltips: {
+                                        callbacks: {
+                                            label: function (tooltipItem, data) {
+                                                var indice = tooltipItem.index;
+                                                return data.labels[indice] + ': $' + (data.datasets[0].data[indice]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') +
+                                                    ' (' + Math.round((data.datasets[0].data[indice] / currentBTCPrice) * 100000) / 100000 + ' BTC)';
+                                            }
+                                        }
+                                    }
+                                },
+                                data: {
+                                    labels: wallets,
+                                    datasets: [{
+                                        data: walletAmmounts,
+                                        borderWidth: 0,
+                                        backgroundColor: [
+                                            '#b53dde',
+                                            "#CF53F9",
+                                            "#d06cf2",
+                                            "#de97f6"
+                                        ],
+                                        hoverBackgroundColor: [
+                                            '#b53dde',
+                                            "#CF53F9",
+                                            "#d06cf2",
+                                            "#de97f6"
+                                        ]
+                                    }]
+                                }
+                            });
+                        })
+                    })
+
                     .fail(function (response) {
                         toastr.options = {
                             "closeButton": true,

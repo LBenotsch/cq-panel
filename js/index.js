@@ -29,6 +29,7 @@ function addData(chart, label, data) {
 function refreshBallancePie() {
     removeData(pieBalances);
     removeData(pieBalances);
+    removeData(pieBalances);
 
     $.getJSON('https://blockchain.info/ticker', function (data) {
         var currentBTCPrice = data.USD.last;
@@ -53,20 +54,26 @@ function refreshBallancePie() {
                     }
                     var bittrexWalletBalanceUSD = Math.round((bittrexWalletBalanceBTC * currentBTCPrice) * 100) / 100
 
-                    //Debug
-                    //copayWalletBalanceUSD = 10
-                    //binanceWalletBalanceUSD = 10
-                    //bittrexWalletBalanceUSD = 10
+                    //Get cryptopia wallet balance by api key. Uses backend service that has private key
+                    $.getJSON(NODE_BACKEND_URL + "cryptopia?key=" + CRYPTOPIA_PUBLIC_KEY, function (data) {
+                        var cryptopiaWalletBalanceBTC = data;
+                        if (cryptopiaWalletBalanceBTC < 0) {
+                            cryptopiaWalletBalanceBTC = 0
+                        }
+                        var cryptopiaWalletBalanceUSD = Math.round((cryptopiaWalletBalanceBTC * currentBTCPrice) * 100) / 100
 
-                    var total = binanceWalletBalanceUSD + bittrexWalletBalanceUSD;
-                    document.getElementById('total-balance-usd').innerHTML = "$" + total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                    document.getElementById('total-balance-btc').innerHTML = Math.round((total / currentBTCPrice) * 100000) / 100000 + ' BTC';
 
-                    var wallets = ["Binance", "Bittrex"];
-                    var walletAmmounts = [binanceWalletBalanceUSD, bittrexWalletBalanceUSD];
+                        var total = binanceWalletBalanceUSD + bittrexWalletBalanceUSD + cryptopiaWalletBalanceUSD;
+                        document.getElementById('total-balance-usd').innerHTML = "$" + total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                        document.getElementById('total-balance-btc').innerHTML = Math.round((total / currentBTCPrice) * 100000) / 100000 + ' BTC';
 
-                    addData(pieBalances, "Binance", binanceWalletBalanceUSD);
-                    addData(pieBalances, "Bittrex", bittrexWalletBalanceUSD);
+                        var wallets = ["Binance", "Bittrex", "Cryptopia"];
+                        var walletAmmounts = [binanceWalletBalanceUSD, bittrexWalletBalanceUSD, cryptopiaWalletBalanceUSD];
+
+                        addData(pieBalances, "Binance", binanceWalletBalanceUSD);
+                        addData(pieBalances, "Bittrex", bittrexWalletBalanceUSD);
+                        addData(pieBalances, "Cryptopia", cryptopiaWalletBalanceUSD);
+                    })
                 })
             })
         })
@@ -142,31 +149,33 @@ $(document).ready(function () {
                 jQuery("#change_coin").html('Save changes');
                 document.getElementById('options').disabled = false;
             }, 300000); //5 mins
-            $.post(NODE_BACKEND_URL + "change_coin", { coin: coin }, function (data) {
-                if (data === 'done') {
-                    toastr.options = {
-                        "closeButton": true,
-                        "debug": false,
-                        "newestOnTop": false,
-                        "progressBar": false,
-                        "positionClass": "toast-bottom-left",
-                        "preventDuplicates": false,
-                        "onclick": null,
-                        "showDuration": "30000",
-                        "hideDuration": "30000",
-                        "timeOut": "30000",
-                        "extendedTimeOut": "10000",
-                        "showEasing": "swing",
-                        "hideEasing": "linear",
-                        "showMethod": "fadeIn",
-                        "hideMethod": "fadeOut"
+            $.post(NODE_BACKEND_URL + "change_coin", {
+                    coin: coin
+                }, function (data) {
+                    if (data === 'done') {
+                        toastr.options = {
+                            "closeButton": true,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": false,
+                            "positionClass": "toast-bottom-left",
+                            "preventDuplicates": false,
+                            "onclick": null,
+                            "showDuration": "30000",
+                            "hideDuration": "30000",
+                            "timeOut": "30000",
+                            "extendedTimeOut": "10000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        }
+                        toastr.success("Coin saved. Changing rigs to: " + coin + ". Changes will take effect in about 5 minutes.");
+                    } else {
+                        jQuery("#change_coin").html('Error');
+                        changeCoinError()
                     }
-                    toastr.success("Coin saved. Changing rigs to: " + coin + ". Changes will take effect in about 5 minutes.");
-                } else {
-                    jQuery("#change_coin").html('Error');
-                    changeCoinError()
-                }
-            })
+                })
                 .fail(function (response) {
                     jQuery("#change_coin").html('Error');
                     changeCoinError()
@@ -226,13 +235,13 @@ $.getJSON(PANEL_JSON_URL, function (data, status) {
         }
 
         //Conditions that signify a GOOD miner
-        if (rigs[i].condition !== "mining" && rigs[i].condition !== "throttle" && rigs[i].condition !== "autorebooted"
-            && rigs[i].condition !== "high_load" && rigs[i].condition !== "just_booted") {
+        if (rigs[i].condition !== "mining" && rigs[i].condition !== "throttle" && rigs[i].condition !== "autorebooted" &&
+            rigs[i].condition !== "high_load" && rigs[i].condition !== "just_booted") {
             t += '<tr>';
             t += '<td>' + rigs[i].rack_loc + '</td>';
             t += '<td> <button type="button" onclick="highlight(this)" id=reboot_' + rigs[i].rack_loc + ' class="icon-logout btn btn-primary-outline" data-toggle="tooltip" data-placement="top" title="Reboot"></button>' +
-                ' <button type="button" onclick="highlight(this)" id=downclock_' + rigs[i].rack_loc + ' class="icon-dashboard btn btn-primary-outline" data-toggle="tooltip" data-placement="top" title="Downclock"></button>'
-                + '</td>';
+                ' <button type="button" onclick="highlight(this)" id=downclock_' + rigs[i].rack_loc + ' class="icon-dashboard btn btn-primary-outline" data-toggle="tooltip" data-placement="top" title="Downclock"></button>' +
+                '</td>';
             t += '<td>' + rigs[i].ip + '</td>';
             t += '<td>' + rigs[i].miner_instance + '/' + rigs[i].gpus + '</td>';
             t += '<td>' + rigs[i].hash + '</td>';
@@ -250,8 +259,8 @@ $.getJSON(PANEL_JSON_URL, function (data, status) {
         k += '<tr>';
         k += '<td>' + rigs[i].rack_loc + '</td>';
         k += '<td> <button type="button" onclick="highlight(this)" id=reboot_' + rigs[i].rack_loc + ' class="icon-logout btn btn-primary-outline" data-toggle="tooltip" data-placement="top" title="Reboot"></button>' +
-            ' <button type="button" onclick="highlight(this)" id=downclock_' + rigs[i].rack_loc + ' class="icon-dashboard btn btn-primary-outline" data-toggle="tooltip" data-placement="top" title="Downclock"></button>'
-            + '</td>';
+            ' <button type="button" onclick="highlight(this)" id=downclock_' + rigs[i].rack_loc + ' class="icon-dashboard btn btn-primary-outline" data-toggle="tooltip" data-placement="top" title="Downclock"></button>' +
+            '</td>';
         k += '<td>' + rigs[i].ip + '</td>';
         k += '<td>' + rigs[i].miner_instance + '/' + rigs[i].gpus + '</td>';
         k += '<td>' + rigs[i].hash + '</td>';
@@ -370,6 +379,26 @@ function fillEstimatedProfits(coin) {
             k += '</tbody>';
             document.getElementById('tableDataEstimatedEarnings').innerHTML = k;
         });
+        // } else if (coin == "etc") {
+        //     $.getJSON('https://api-etc.ethermine.org/miner/0xbe4e516147882339f40712373192f2737e6012d0/currentStats', function (data, status) {
+        //         var obj = JSON.parse(JSON.stringify(data));
+        //         var usdPerMin = obj.data.usdPerMin;
+        //         var btcPerMin = obj.data.btcPerMin;
+
+        //         var k = '<tbody>';
+        //         k += '<tr>';
+        //         k += '<td>' + "Day" + '</td>'; //Period
+        //         k += '<td>' + "$" + (Math.round((usdPerMin * 1440) * 100) / 100).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + '</td>'; //USD
+        //         k += '<td>' + btcPerMin * 1440 + '</td>'; //BTC
+        //         k += '</tr>';
+        //         k += '<tr>';
+        //         k += '<td>' + "Month" + '</td>'; //Period
+        //         k += '<td>' + "$" + (Math.round((usdPerMin * 43200) * 100) / 100).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + '</td>'; //USD
+        //         k += '<td>' + btcPerMin * 43200 + '</td>'; //BTC
+        //         k += '</tr>';
+        //         k += '</tbody>';
+        //         document.getElementById('tableDataEstimatedEarnings').innerHTML = k;
+        //     });
     } else {
         //coin not found
         var k = '<tbody>';
