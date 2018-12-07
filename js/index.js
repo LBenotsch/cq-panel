@@ -221,7 +221,7 @@ $.getJSON(PANEL_JSON_URL, function (data, status) {
             case 'musicoin.nomnom.technology:4444':
                 coin = 'MUSIC';
                 break;
-            case 'lb.geo.ellapool.eu:8004':
+            case 'lb.geo.ellapool.eu:8009':
                 coin = 'ELLA';
                 break;
             case 'us.expmine.pro:9009':
@@ -310,7 +310,7 @@ $.getJSON(PANEL_JSON_URL, function (data, status) {
             case 'musicoin.nomnom.technology:4444':
                 objNew.music++;
                 break;
-            case 'lb.geo.ellapool.eu:8004':
+            case 'lb.geo.ellapool.eu:8009':
                 objNew.ella++;
                 break;
             case 'us.expmine.pro:9009':
