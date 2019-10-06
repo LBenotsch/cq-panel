@@ -41,41 +41,41 @@ function refreshBallancePie() {
             var copayWalletBalanceBTC = (copayWalletBalanceBTCRaw * 0.00000001)
             var copayWalletBalanceUSD = Math.round((copayWalletBalanceBTC * currentBTCPrice) * 100) / 100
 
-            //Get binance wallet balance by api key. Uses backend service that has private key
-            $.getJSON(NODE_BACKEND_URL + "binance?key=" + BINANCE_PUBLIC_KEY, function (data) {
-                var binanceWalletBalanceBTC = data[0].free;
-                var binanceWalletBalanceUSD = Math.round((binanceWalletBalanceBTC * currentBTCPrice) * 100) / 100
+            // //Get binance wallet balance by api key. Uses backend service that has private key
+            // $.getJSON(NODE_BACKEND_URL + "binance?key=" + BINANCE_PUBLIC_KEY, function (data) {
+            //     var binanceWalletBalanceBTC = data[0].free;
+            //     var binanceWalletBalanceUSD = Math.round((binanceWalletBalanceBTC * currentBTCPrice) * 100) / 100
 
-                //Get bittrex wallet balance by api key. Uses backend service that has private key
-                $.getJSON(NODE_BACKEND_URL + "bittrex?key=" + BITTREX_PUBLIC_KEY, function (data) {
-                    var bittrexWalletBalanceBTC = data;
-                    if (bittrexWalletBalanceBTC < 0) {
-                        bittrexWalletBalanceBTC = 0
-                    }
-                    var bittrexWalletBalanceUSD = Math.round((bittrexWalletBalanceBTC * currentBTCPrice) * 100) / 100
+            //     //Get bittrex wallet balance by api key. Uses backend service that has private key
+            //     $.getJSON(NODE_BACKEND_URL + "bittrex?key=" + BITTREX_PUBLIC_KEY, function (data) {
+            //         var bittrexWalletBalanceBTC = data;
+            //         if (bittrexWalletBalanceBTC < 0) {
+            //             bittrexWalletBalanceBTC = 0
+            //         }
+            //         var bittrexWalletBalanceUSD = Math.round((bittrexWalletBalanceBTC * currentBTCPrice) * 100) / 100
 
-                    //Get cryptopia wallet balance by api key. Uses backend service that has private key
-                    $.getJSON(NODE_BACKEND_URL + "cryptopia?key=" + CRYPTOPIA_PUBLIC_KEY, function (data) {
-                        var cryptopiaWalletBalanceBTC = data;
-                        if (cryptopiaWalletBalanceBTC < 0) {
-                            cryptopiaWalletBalanceBTC = 0
-                        }
-                        var cryptopiaWalletBalanceUSD = Math.round((cryptopiaWalletBalanceBTC * currentBTCPrice) * 100) / 100
+            //         //Get cryptopia wallet balance by api key. Uses backend service that has private key
+            //         $.getJSON(NODE_BACKEND_URL + "cryptopia?key=" + CRYPTOPIA_PUBLIC_KEY, function (data) {
+            //             var cryptopiaWalletBalanceBTC = data;
+            //             if (cryptopiaWalletBalanceBTC < 0) {
+            //                 cryptopiaWalletBalanceBTC = 0
+            //             }
+            //             var cryptopiaWalletBalanceUSD = Math.round((cryptopiaWalletBalanceBTC * currentBTCPrice) * 100) / 100
 
 
-                        var total = binanceWalletBalanceUSD + bittrexWalletBalanceUSD + cryptopiaWalletBalanceUSD;
-                        document.getElementById('total-balance-usd').innerHTML = "$" + total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                        document.getElementById('total-balance-btc').innerHTML = Math.round((total / currentBTCPrice) * 100000) / 100000 + ' BTC';
+            //             var total = binanceWalletBalanceUSD + bittrexWalletBalanceUSD + cryptopiaWalletBalanceUSD;
+            //             document.getElementById('total-balance-usd').innerHTML = "$" + total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            //             document.getElementById('total-balance-btc').innerHTML = Math.round((total / currentBTCPrice) * 100000) / 100000 + ' BTC';
 
-                        var wallets = ["Binance", "Bittrex", "Cryptopia"];
-                        var walletAmmounts = [binanceWalletBalanceUSD, bittrexWalletBalanceUSD, cryptopiaWalletBalanceUSD];
+            //             var wallets = ["Binance", "Bittrex", "Cryptopia"];
+            //             var walletAmmounts = [binanceWalletBalanceUSD, bittrexWalletBalanceUSD, cryptopiaWalletBalanceUSD];
 
-                        addData(pieBalances, "Binance", binanceWalletBalanceUSD);
-                        addData(pieBalances, "Bittrex", bittrexWalletBalanceUSD);
-                        addData(pieBalances, "Cryptopia", cryptopiaWalletBalanceUSD);
-                    })
-                })
-            })
+            //             addData(pieBalances, "Binance", binanceWalletBalanceUSD);
+            //             addData(pieBalances, "Bittrex", bittrexWalletBalanceUSD);
+            //             addData(pieBalances, "Cryptopia", cryptopiaWalletBalanceUSD);
+            //         })
+            //     })
+            // })
         })
     });
 }
