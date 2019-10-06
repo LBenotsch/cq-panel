@@ -46,36 +46,36 @@ function refreshBallancePie() {
             //     var binanceWalletBalanceBTC = data[0].free;
             //     var binanceWalletBalanceUSD = Math.round((binanceWalletBalanceBTC * currentBTCPrice) * 100) / 100
 
-            //     //Get bittrex wallet balance by api key. Uses backend service that has private key
-            //     $.getJSON(NODE_BACKEND_URL + "bittrex?key=" + BITTREX_PUBLIC_KEY, function (data) {
-            //         var bittrexWalletBalanceBTC = data;
-            //         if (bittrexWalletBalanceBTC < 0) {
-            //             bittrexWalletBalanceBTC = 0
-            //         }
-            //         var bittrexWalletBalanceUSD = Math.round((bittrexWalletBalanceBTC * currentBTCPrice) * 100) / 100
+                //Get bittrex wallet balance by api key. Uses backend service that has private key
+                $.getJSON(NODE_BACKEND_URL + "bittrex?key=" + BITTREX_PUBLIC_KEY, function (data) {
+                    var bittrexWalletBalanceBTC = data;
+                    if (bittrexWalletBalanceBTC < 0) {
+                        bittrexWalletBalanceBTC = 0
+                    }
+                    var bittrexWalletBalanceUSD = Math.round((bittrexWalletBalanceBTC * currentBTCPrice) * 100) / 100
 
-            //         //Get cryptopia wallet balance by api key. Uses backend service that has private key
-            //         $.getJSON(NODE_BACKEND_URL + "cryptopia?key=" + CRYPTOPIA_PUBLIC_KEY, function (data) {
-            //             var cryptopiaWalletBalanceBTC = data;
-            //             if (cryptopiaWalletBalanceBTC < 0) {
-            //                 cryptopiaWalletBalanceBTC = 0
-            //             }
-            //             var cryptopiaWalletBalanceUSD = Math.round((cryptopiaWalletBalanceBTC * currentBTCPrice) * 100) / 100
+                    // //Get cryptopia wallet balance by api key. Uses backend service that has private key
+                    // $.getJSON(NODE_BACKEND_URL + "cryptopia?key=" + CRYPTOPIA_PUBLIC_KEY, function (data) {
+                    //     var cryptopiaWalletBalanceBTC = data;
+                    //     if (cryptopiaWalletBalanceBTC < 0) {
+                    //         cryptopiaWalletBalanceBTC = 0
+                    //     }
+                    //     var cryptopiaWalletBalanceUSD = Math.round((cryptopiaWalletBalanceBTC * currentBTCPrice) * 100) / 100
 
 
-            //             var total = binanceWalletBalanceUSD + bittrexWalletBalanceUSD + cryptopiaWalletBalanceUSD;
-            //             document.getElementById('total-balance-usd').innerHTML = "$" + total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-            //             document.getElementById('total-balance-btc').innerHTML = Math.round((total / currentBTCPrice) * 100000) / 100000 + ' BTC';
+                        var total = bittrexWalletBalanceUSD;
+                        document.getElementById('total-balance-usd').innerHTML = "$" + total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                        document.getElementById('total-balance-btc').innerHTML = Math.round((total / currentBTCPrice) * 100000) / 100000 + ' BTC';
 
-            //             var wallets = ["Binance", "Bittrex", "Cryptopia"];
-            //             var walletAmmounts = [binanceWalletBalanceUSD, bittrexWalletBalanceUSD, cryptopiaWalletBalanceUSD];
+                        var wallets = ["Bittrex"];
+                        var walletAmmounts = [bittrexWalletBalanceUSD];
 
-            //             addData(pieBalances, "Binance", binanceWalletBalanceUSD);
-            //             addData(pieBalances, "Bittrex", bittrexWalletBalanceUSD);
-            //             addData(pieBalances, "Cryptopia", cryptopiaWalletBalanceUSD);
-            //         })
-            //     })
-            // })
+                        //addData(pieBalances, "Binance", binanceWalletBalanceUSD);
+                        addData(pieBalances, "Bittrex", bittrexWalletBalanceUSD);
+                        //addData(pieBalances, "Cryptopia", cryptopiaWalletBalanceUSD);
+                    //})
+                })
+            //})
         })
     });
 }
@@ -339,7 +339,7 @@ $.getJSON(PANEL_JSON_URL, function (data, status) {
 function fillEstimatedProfits(coin) {
     if (coin == "eth") {
         //Pulls json data
-        $.getJSON('https://api.ethermine.org/miner/0xbe4e516147882339f40712373192f2737e6012d0/currentStats', function (data, status) {
+        $.getJSON('https://api.ethermine.org/miner/0xfb460684608fdfc8b07635b4d1195e87b377c7e0/currentStats', function (data, status) {
             var obj = JSON.parse(JSON.stringify(data));
             var usdPerMin = obj.data.usdPerMin;
             var btcPerMin = obj.data.btcPerMin;
@@ -360,7 +360,7 @@ function fillEstimatedProfits(coin) {
             document.getElementById('tableDataEstimatedEarnings').innerHTML = k;
         });
     } else if (coin == "etc") {
-        $.getJSON('https://api-etc.ethermine.org/miner/0xbe4e516147882339f40712373192f2737e6012d0/currentStats', function (data, status) {
+        $.getJSON('https://api-etc.ethermine.org/miner/0x2b69322372df18b9e479256c025f2186066cd596/currentStats', function (data, status) {
             var obj = JSON.parse(JSON.stringify(data));
             var usdPerMin = obj.data.usdPerMin;
             var btcPerMin = obj.data.btcPerMin;
@@ -380,7 +380,7 @@ function fillEstimatedProfits(coin) {
             document.getElementById('tableDataEstimatedEarnings').innerHTML = k;
         });
         // } else if (coin == "etc") {
-        //     $.getJSON('https://api-etc.ethermine.org/miner/0xbe4e516147882339f40712373192f2737e6012d0/currentStats', function (data, status) {
+        //     $.getJSON('https://api-etc.ethermine.org/miner/0xfb460684608fdfc8b07635b4d1195e87b377c7e0/currentStats', function (data, status) {
         //         var obj = JSON.parse(JSON.stringify(data));
         //         var usdPerMin = obj.data.usdPerMin;
         //         var btcPerMin = obj.data.btcPerMin;
